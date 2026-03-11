@@ -19,21 +19,17 @@ function setLanguage(lang) {
             if (text) el.textContent = text;
         }
     });
+}
 
-    // Use /ta path for Tamil (enables correct OG social preview when sharing)
-    if (lang === 'ta') {
-        window.history.replaceState({}, '', '/ta');
-    } else {
-        window.history.replaceState({}, '', '/');
-    }
+// Switch language and update hash
+function switchLanguage(lang) {
+    window.location.hash = lang === 'ta' ? '#ta' : '';
+    setLanguage(lang);
 }
 
 function initLanguage() {
-    const path = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
-    const lang = params.get('lang');
-    // Detect Tamil from /ta path or ?lang=ta query param
-    if (path === '/ta' || path === '/ta/' || lang === 'ta' || lang === 'tamil') {
+    const hash = window.location.hash;
+    if (hash === '#ta') {
         setLanguage('ta');
     } else {
         setLanguage('en');
@@ -284,7 +280,7 @@ function initFooterHearts() {
     observer.observe(footer);
 }
 
-// ===== Add to Calendar (Deeplinks) =====
+// ===== Add to Calendar (Native Deeplinks) =====
 function addToCalendar(eventType) {
     let event;
 
@@ -293,61 +289,48 @@ function addToCalendar(eventType) {
             title: currentLang === 'ta'
                 ? 'வரவேற்பு - ஆனந்தகுமார் & மணிமொழி'
                 : 'Reception - Anandkumar & Manimozhi',
-            startLocal: '20260411T190000',
-            endLocal: '20260411T230000',
             description: currentLang === 'ta'
                 ? 'Er. J. ஆனந்தகுமார் & Dr. S.A. மணிமொழி @ யாழினி அவர்களின் வரவேற்பு விழா'
                 : 'Reception of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini',
             location: 'Sri Lalita Mahal',
+            // Local times for Android intent (milliseconds)
+            beginDate: new Date('2026-04-11T19:00:00+05:30'),
+            endDate: new Date('2026-04-11T23:00:00+05:30'),
+            // For ICS / Google Cal
+            dtStart: '20260411T190000',
+            dtEnd: '20260411T220000',
+            // All-day fallback dates
+            dateStart: '20260411',
+            dateEnd: '20260412',
         };
     } else {
         event = {
             title: currentLang === 'ta'
                 ? 'திருமணம் - ஆனந்தகுமார் & மணிமொழி'
                 : 'Marriage - Anandkumar & Manimozhi',
-            startLocal: '20260412T073000',
-            endLocal: '20260412T090000',
             description: currentLang === 'ta'
                 ? 'Er. J. ஆனந்தகுமார் & Dr. S.A. மணிமொழி @ யாழினி அவர்களின் திருமண விழா'
                 : 'Marriage ceremony of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini',
             location: 'Sri Lalita Mahal',
+            beginDate: new Date('2026-04-12T07:30:00+05:30'),
+            endDate: new Date('2026-04-12T09:00:00+05:30'),
+            dtStart: '20260412T073000',
+            dtEnd: '20260412T090000',
+            dateStart: '20260412',
+            dateEnd: '20260413',
         };
     }
 
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isIOS) {
-        // iOS handles .ics natively - prompts to add to Calendar app
-        const icsContent = generateICS(event);
-        downloadFile(icsContent, `${eventType}-anandkumar-manimozhi.ics`, 'text/calendar;charset=utf-8');
-    } else {
-        // Android & Desktop: Google Calendar deeplink (opens app on Android, web on desktop)
-        const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
-            `&text=${encodeURIComponent(event.title)}` +
-            `&dates=${event.startLocal}/${event.endLocal}` +
-            `&ctz=Asia/Kolkata` +
-            `&details=${encodeURIComponent(event.description)}` +
-            `&location=${encodeURIComponent(event.location)}`;
-        window.open(gcalUrl, '_blank');
-    }
-}
-
-function generateICS(event) {
-    const now = new Date();
-    const timestamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-
-    return [
+    const icsData = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Wedding Invitation//EN',
+        'PRODID:-//Wedding//EN',
         'CALSCALE:GREGORIAN',
         'METHOD:PUBLISH',
         'BEGIN:VEVENT',
-        `DTSTART;TZID=Asia/Kolkata:${event.startLocal}`,
-        `DTEND;TZID=Asia/Kolkata:${event.endLocal}`,
-        `DTSTAMP:${timestamp}`,
-        `UID:${event.startLocal}-wedding@anandkumar-manimozhi`,
         `SUMMARY:${event.title}`,
+        `DTSTART;TZID=Asia/Kolkata:${event.dtStart}`,
+        `DTEND;TZID=Asia/Kolkata:${event.dtEnd}`,
         `DESCRIPTION:${event.description}`,
         `LOCATION:${event.location}`,
         `URL:https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6`,
@@ -357,26 +340,28 @@ function generateICS(event) {
         'ACTION:DISPLAY',
         `DESCRIPTION:${event.title} in 1 hour`,
         'END:VALARM',
-        'BEGIN:VALARM',
-        'TRIGGER:-P1D',
-        'ACTION:DISPLAY',
-        `DESCRIPTION:${event.title} tomorrow`,
-        'END:VALARM',
         'END:VEVENT',
         'END:VCALENDAR'
     ].join('\r\n');
-}
 
-function downloadFile(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const isMobile = /android|iPad|iPhone|iPod/i.test(userAgent);
+
+    if (isMobile) {
+        // Mobile: data URI opens native calendar app directly
+        window.location.href = `data:text/calendar;charset=utf8,${encodeURIComponent(icsData)}`;
+    } else {
+        // Desktop: download .ics file
+        const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${eventType}-anandkumar-manimozhi.ics`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 }
 
 // ===== Download Invitation Card =====
