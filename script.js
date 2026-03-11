@@ -21,7 +21,11 @@ function setLanguage(lang) {
     });
 
     const url = new URL(window.location);
-    url.searchParams.set('lang', lang);
+    if (lang === 'ta') {
+        url.searchParams.set('lang', 'ta');
+    } else {
+        url.searchParams.delete('lang');
+    }
     window.history.replaceState({}, '', url);
 }
 
