@@ -1202,22 +1202,6 @@ body {
     box-shadow: 0 8px 30px rgba(26, 82, 118, 0.4);
 }
 
-/* ===== Reveal Animation ===== */
-.reveal-card {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.reveal-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.reveal-card:nth-child(2) {
-    transition-delay: 0.15s;
-}
-
 /* ===== Tamil Font Adjustments ===== */
 body.lang-ta .groom-name,
 body.lang-ta .bride-name {
@@ -1273,7 +1257,15 @@ body.lang-ta .event-badge {
     margin: 0 auto 30px;
     line-height: 1.8;
     font-style: italic;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition-delay: 0.2s;
+}
+
+.invitation-request.visible {
     opacity: 0.9;
+    transform: translateY(0);
 }
 
 /* Couple Icon */
@@ -1286,6 +1278,67 @@ body.lang-ta .event-badge {
 
 .couple-icon svg {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* ===== FAB Container & Buttons ===== */
+.fab-container {
+    position: fixed;
+    top: 20px;
+    right: 200px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fabPulse 3s ease-in-out infinite;
+}
+
+.fab-btn:hover {
+    background: var(--gold);
+    color: var(--maroon-dark);
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px var(--gold-glow);
+}
+
+.fab-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes fabPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+    50% { box-shadow: 0 4px 20px var(--gold-glow), 0 0 0 4px rgba(60, 187, 177, 0.1); }
+}
+
+.fab-btn.scrolled {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(60, 187, 177, 0.2);
+    color: var(--maroon);
+}
+
+.fab-btn.scrolled:hover {
+    background: var(--gold);
+    color: var(--white);
+}
+
+.location-fab {
+    animation-delay: 0.5s;
 }
 
 /* ===== Responsive ===== */
@@ -1333,6 +1386,47 @@ body.lang-ta .event-badge {
         width: 80px;
         height: 80px;
     }
+
+    /* FABs: vertical stack on right side, between center and bottom */
+    .fab-container {
+        top: auto;
+        right: 16px;
+        bottom: 80px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .fab-btn {
+        width: 50px;
+        height: 50px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.92);
+        border-color: rgba(60, 187, 177, 0.25);
+        color: var(--maroon);
+    }
+
+    .fab-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .fab-btn:hover, .fab-btn:active {
+        background: var(--gold);
+        color: var(--white);
+    }
+
+    /* No need to toggle style on scroll for mobile - always visible */
+    .fab-btn.scrolled {
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--maroon);
+    }
+
+    /* Scroll-to-top moves to left on mobile to avoid FAB overlap */
+    .scroll-top {
+        left: 20px;
+        right: auto;
+        bottom: 20px;
+    }
 }
 
 @media (max-width: 400px) {
@@ -1346,11 +1440,6 @@ body.lang-ta .event-badge {
 
     .date-day {
         font-size: 3rem;
-    }
-
-    .download-preview {
-        width: 200px;
-        height: 320px;
     }
 
     .hero-monogram {
@@ -1372,77 +1461,154 @@ body.lang-ta .event-badge {
     }
 }
 
-/* ===== Reduced Motion ===== */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-
-    .particle, .confetti-piece, .footer-heart {
-        display: none !important;
-    }
-}
-
-/* ===== Download FAB ===== */
-.download-fab {
+/* ===== Floating Petals ===== */
+.floating-petals {
     position: fixed;
-    top: 23px;
-    right: 205px;
-    z-index: 1000;
-    width: 45px;
-    height: 45px;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
+    top: -20px;
+    opacity: 0;
+    animation: petalFall linear infinite;
+    filter: blur(0.3px);
+    will-change: transform, opacity;
+}
+
+@keyframes petalFall {
+    0% {
+        transform: translateY(-10px) rotate(0deg) translateX(0);
+        opacity: 0;
+    }
+    5% { opacity: 0.7; }
+    25% {
+        transform: translateY(25vh) rotate(90deg) translateX(30px);
+    }
+    50% {
+        transform: translateY(50vh) rotate(180deg) translateX(-20px);
+        opacity: 0.5;
+    }
+    75% {
+        transform: translateY(75vh) rotate(270deg) translateX(15px);
+    }
+    95% { opacity: 0.2; }
+    100% {
+        transform: translateY(105vh) rotate(360deg) translateX(-10px);
+        opacity: 0;
+    }
+}
+
+/* ===== Enhanced Scroll Animations ===== */
+.reveal-card,
+.reveal-element {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-card.visible,
+.reveal-element.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.reveal-card:nth-child(2) {
+    transition-delay: 0.15s;
+}
+
+/* ===== Card 3D Tilt on Interaction ===== */
+.event-card,
+.venue-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* ===== Touch Sparkle Effect ===== */
+.sparkle {
+    position: fixed;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--white);
-    text-decoration: none;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: fabPulse 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 9998;
+    animation: sparkleAnim 0.8s ease-out forwards;
 }
 
-.download-fab:hover {
-    background: var(--gold);
-    color: var(--maroon-dark);
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px var(--gold-glow);
+@keyframes sparkleAnim {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0) translateY(-30px);
+        opacity: 0;
+    }
 }
 
-@keyframes fabPulse {
-    0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
-    50% { box-shadow: 0 4px 20px var(--gold-glow), 0 0 0 4px rgba(60, 187, 177, 0.1); }
+/* ===== Hero Parallax ===== */
+.hero {
+    perspective: 1px;
+    transform-style: preserve-3d;
 }
 
-.download-fab.scrolled {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(60, 187, 177, 0.2);
-    color: var(--maroon);
+.hero-content {
+    will-change: transform, opacity;
 }
 
-.download-fab.scrolled:hover {
-    background: var(--gold);
-    color: var(--white);
+/* ===== Section Entrance Flair ===== */
+.section-title {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-@media (max-width: 768px) {
-    .download-fab {
-        right: auto;
-        left: 10px;
-        top: 10px;
-        width: 36px;
-        height: 36px;
+.section-title.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== Smooth Scrolling Enhancements ===== */
+@supports (scroll-behavior: smooth) {
+    html {
+        scroll-padding-top: 80px;
+    }
+}
+
+/* ===== Mobile Touch Feedback ===== */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
     }
 
-    .download-fab svg {
-        width: 16px;
-        height: 16px;
+    .btn:active {
+        transform: scale(0.96);
+        transition: transform 0.1s ease;
+    }
+
+    .event-card {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .event-card:active {
+        transform: scale(0.98);
+        transition: transform 0.15s ease;
+    }
+
+    /* Larger touch targets on mobile */
+    .btn-calendar {
+        padding: 15px 32px;
+        font-size: 16px;
+    }
+
+    .btn-maps {
+        padding: 16px 36px;
     }
 }
 
@@ -1512,5 +1678,23 @@ body.lang-ta .event-badge {
     .floral-bg-svg {
         width: 80px;
         opacity: 0.7;
+    }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .particle, .confetti-piece, .footer-heart, .petal {
+        display: none !important;
+    }
+
+    .reveal-card, .reveal-element, .section-title {
+        opacity: 1 !important;
+        transform: none !important;
     }
 }

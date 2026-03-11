@@ -20,19 +20,20 @@ function setLanguage(lang) {
         }
     });
 
-    const url = new URL(window.location);
+    // Use /ta path for Tamil (enables correct OG social preview when sharing)
     if (lang === 'ta') {
-        url.searchParams.set('lang', 'ta');
+        window.history.replaceState({}, '', '/ta');
     } else {
-        url.searchParams.delete('lang');
+        window.history.replaceState({}, '', '/');
     }
-    window.history.replaceState({}, '', url);
 }
 
 function initLanguage() {
+    const path = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
     const lang = params.get('lang');
-    if (lang === 'ta' || lang === 'tamil') {
+    // Detect Tamil from /ta path or ?lang=ta query param
+    if (path === '/ta' || path === '/ta/' || lang === 'ta' || lang === 'tamil') {
         setLanguage('ta');
     } else {
         setLanguage('en');
@@ -202,11 +203,11 @@ function initScrollReveal() {
             }
         });
     }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
     });
 
-    document.querySelectorAll('.reveal-card').forEach(el => {
+    document.querySelectorAll('.reveal-card, .section-title, .invitation-request').forEach(el => {
         observer.observe(el);
     });
 }
@@ -214,13 +215,13 @@ function initScrollReveal() {
 // ===== Language Toggle Scroll State =====
 function initLangToggleScroll() {
     const toggle = document.getElementById('langToggle');
-    const fab = document.getElementById('downloadFab');
+    const fabBtns = document.querySelectorAll('.fab-btn');
     const hero = document.getElementById('hero');
 
     const observer = new IntersectionObserver(([entry]) => {
         const scrolled = !entry.isIntersecting;
         toggle.classList.toggle('scrolled', scrolled);
-        if (fab) fab.classList.toggle('scrolled', scrolled);
+        fabBtns.forEach(btn => btn.classList.toggle('scrolled', scrolled));
     }, { threshold: 0.3 });
 
     observer.observe(hero);
@@ -283,7 +284,7 @@ function initFooterHearts() {
     observer.observe(footer);
 }
 
-// ===== Add to Calendar =====
+// ===== Add to Calendar (Deeplinks) =====
 function addToCalendar(eventType) {
     let event;
 
@@ -292,35 +293,43 @@ function addToCalendar(eventType) {
             title: currentLang === 'ta'
                 ? 'வரவேற்பு - ஆனந்தகுமார் & மணிமொழி'
                 : 'Reception - Anandkumar & Manimozhi',
-            start: '20260411T190000',
-            end: '20260411T230000',
+            startLocal: '20260411T190000',
+            endLocal: '20260411T230000',
             description: currentLang === 'ta'
                 ? 'Er. J. ஆனந்தகுமார் & Dr. S.A. மணிமொழி @ யாழினி அவர்களின் வரவேற்பு விழா'
                 : 'Reception of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini',
+            location: 'Sri Lalita Mahal',
         };
     } else {
         event = {
             title: currentLang === 'ta'
                 ? 'திருமணம் - ஆனந்தகுமார் & மணிமொழி'
                 : 'Marriage - Anandkumar & Manimozhi',
-            start: '20260412T073000',
-            end: '20260412T090000',
+            startLocal: '20260412T073000',
+            endLocal: '20260412T090000',
             description: currentLang === 'ta'
                 ? 'Er. J. ஆனந்தகுமார் & Dr. S.A. மணிமொழி @ யாழினி அவர்களின் திருமண விழா'
                 : 'Marriage ceremony of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini',
+            location: 'Sri Lalita Mahal',
         };
     }
 
-    event.location = 'Sri Lalita Mahal';
-    event.url = 'https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6';
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    const icsContent = generateICS(event);
-    downloadFile(icsContent, `${eventType}-anandkumar-manimozhi.ics`, 'text/calendar;charset=utf-8');
-
-    // Visual feedback - button ripple
-    const btn = event === 'reception'
-        ? document.querySelectorAll('.btn-calendar')[0]
-        : document.querySelectorAll('.btn-calendar')[1];
+    if (isIOS) {
+        // iOS handles .ics natively - prompts to add to Calendar app
+        const icsContent = generateICS(event);
+        downloadFile(icsContent, `${eventType}-anandkumar-manimozhi.ics`, 'text/calendar;charset=utf-8');
+    } else {
+        // Android & Desktop: Google Calendar deeplink (opens app on Android, web on desktop)
+        const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+            `&text=${encodeURIComponent(event.title)}` +
+            `&dates=${event.startLocal}/${event.endLocal}` +
+            `&ctz=Asia/Kolkata` +
+            `&details=${encodeURIComponent(event.description)}` +
+            `&location=${encodeURIComponent(event.location)}`;
+        window.open(gcalUrl, '_blank');
+    }
 }
 
 function generateICS(event) {
@@ -334,14 +343,14 @@ function generateICS(event) {
         'CALSCALE:GREGORIAN',
         'METHOD:PUBLISH',
         'BEGIN:VEVENT',
-        `DTSTART:${event.start}`,
-        `DTEND:${event.end}`,
+        `DTSTART;TZID=Asia/Kolkata:${event.startLocal}`,
+        `DTEND;TZID=Asia/Kolkata:${event.endLocal}`,
         `DTSTAMP:${timestamp}`,
-        `UID:${event.start}-wedding@anandkumar-manimozhi`,
+        `UID:${event.startLocal}-wedding@anandkumar-manimozhi`,
         `SUMMARY:${event.title}`,
         `DESCRIPTION:${event.description}`,
         `LOCATION:${event.location}`,
-        `URL:${event.url}`,
+        `URL:https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6`,
         'STATUS:CONFIRMED',
         'BEGIN:VALARM',
         'TRIGGER:-PT1H',
@@ -805,17 +814,170 @@ function roundRect(ctx, x, y, w, h, r) {
     ctx.closePath();
 }
 
+// ===== Floating Petals =====
+function initFloatingPetals() {
+    const container = document.getElementById('floatingPetals');
+    if (!container) return;
+
+    const petalCount = window.innerWidth < 768 ? 10 : 18;
+    const petalColors = [
+        'rgba(255, 182, 193, 0.6)',
+        'rgba(255, 160, 180, 0.5)',
+        'rgba(255, 200, 210, 0.4)',
+        'rgba(255, 220, 230, 0.35)',
+        'rgba(60, 187, 177, 0.25)',
+        'rgba(142, 221, 214, 0.3)',
+    ];
+
+    for (let i = 0; i < petalCount; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        const size = Math.random() * 8 + 6;
+        petal.style.width = size + 'px';
+        petal.style.height = size + 'px';
+        petal.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.animationDuration = (Math.random() * 10 + 12) + 's';
+        petal.style.animationDelay = (Math.random() * 20) + 's';
+        container.appendChild(petal);
+    }
+}
+
+// ===== Hero Parallax on Scroll =====
+function initHeroParallax() {
+    const hero = document.querySelector('.hero');
+    const heroContent = document.querySelector('.hero-content');
+    const shapes = document.querySelectorAll('.floating-shape');
+    if (!hero || !heroContent) return;
+
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const heroHeight = hero.offsetHeight;
+
+                if (scrollY < heroHeight * 1.5) {
+                    const factor = scrollY / heroHeight;
+                    heroContent.style.transform = `translateY(${scrollY * 0.3}px)`;
+                    heroContent.style.opacity = Math.max(0, 1 - factor * 0.9);
+
+                    shapes.forEach((shape, i) => {
+                        const speed = 0.08 + (i * 0.04);
+                        shape.style.transform = `translateY(${scrollY * speed}px)`;
+                    });
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+}
+
+// ===== Card 3D Tilt Effect =====
+function initCardTilt() {
+    const cards = document.querySelectorAll('.event-card, .venue-card');
+
+    cards.forEach(card => {
+        function handleMove(x, y) {
+            const rect = card.getBoundingClientRect();
+            const centerX = (x - rect.left) / rect.width - 0.5;
+            const centerY = (y - rect.top) / rect.height - 0.5;
+            card.style.transition = 'none';
+            card.style.transform = `perspective(800px) rotateY(${centerX * 8}deg) rotateX(${-centerY * 8}deg) scale(1.02)`;
+        }
+
+        function handleEnd() {
+            card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.transform = '';
+        }
+
+        // Touch events
+        card.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            handleMove(touch.clientX, touch.clientY);
+        }, { passive: true });
+        card.addEventListener('touchend', handleEnd);
+
+        // Mouse events for desktop
+        card.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        card.addEventListener('mouseleave', handleEnd);
+    });
+}
+
+// ===== Touch Sparkle Effect =====
+function initTouchSparkle() {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (!isTouchDevice) return;
+
+    const sparkleColors = ['#3cbbb1', '#8eddd6', '#ffb6c1', '#ffd700', '#ffffff'];
+    let lastSparkle = 0;
+
+    document.addEventListener('touchmove', (e) => {
+        const now = Date.now();
+        if (now - lastSparkle < 60) return; // Throttle
+        lastSparkle = now;
+
+        const touch = e.touches[0];
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = touch.clientX + 'px';
+        sparkle.style.top = touch.clientY + 'px';
+        sparkle.style.background = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+        sparkle.style.boxShadow = `0 0 6px ${sparkle.style.background}`;
+        document.body.appendChild(sparkle);
+
+        setTimeout(() => sparkle.remove(), 800);
+    }, { passive: true });
+}
+
+// ===== Device Orientation Parallax (Gyroscope) =====
+function initGyroParallax() {
+    const heroContent = document.querySelector('.hero-content');
+    const monogram = document.querySelector('.hero-monogram');
+    if (!heroContent || !window.DeviceOrientationEvent) return;
+
+    let hasPermission = false;
+
+    function handleOrientation(e) {
+        if (!hasPermission && window.scrollY > window.innerHeight) return;
+        const gamma = e.gamma || 0; // Left-right tilt (-90 to 90)
+        const beta = e.beta || 0;   // Front-back tilt (-180 to 180)
+
+        const moveX = gamma * 0.3;
+        const moveY = (beta - 45) * 0.2; // Offset for typical phone holding angle
+
+        if (monogram && window.scrollY < window.innerHeight) {
+            monogram.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
+    }
+
+    // Try to listen without permission first (Android)
+    window.addEventListener('deviceorientation', (e) => {
+        if (e.gamma !== null) {
+            hasPermission = true;
+            handleOrientation(e);
+        }
+    }, { passive: true });
+}
+
 // ===== Initialize Everything =====
 document.addEventListener('DOMContentLoaded', () => {
     initLanguage();
     initPreloader();
     initParticles();
+    initFloatingPetals();
     initCountdown();
     initScrollProgress();
     initScrollReveal();
     initLangToggleScroll();
     initScrollTop();
     initFooterHearts();
+    initHeroParallax();
+    initCardTilt();
+    initTouchSparkle();
+    initGyroParallax();
 
     // Add number transition styles
     const style = document.createElement('style');

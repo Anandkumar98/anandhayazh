@@ -4,10 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding Invitation - Anandkumar & Manimozhi</title>
-    <meta name="description" content="Wedding Invitation of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini">
-    <meta property="og:title" content="Wedding Invitation - Anandkumar & Manimozhi">
-    <meta property="og:description" content="You are cordially invited to our wedding celebration!">
+    <meta name="description" content="Wedding Invitation of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini — Reception: April 11, 2026 | Marriage: April 12, 2026 at Sri Lalita Mahal">
+
+    <!-- Open Graph / Social Preview -->
+    <meta property="og:title" content="Wedding Invitation — Anandkumar & Manimozhi">
+    <meta property="og:description" content="You are cordially invited to the wedding of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini. Reception: April 11, 2026 | Marriage: April 12, 2026">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anandhayazh.in/">
+    <meta property="og:image" content="https://anandhayazh.in/og-en.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:site_name" content="Anandkumar & Manimozhi Wedding">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wedding Invitation — Anandkumar & Manimozhi">
+    <meta name="twitter:description" content="You are cordially invited to the wedding of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini">
+    <meta name="twitter:image" content="https://anandhayazh.in/og-en.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Engagement&family=Corinthia:wght@400;700&family=Kavivanar&family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&family=Noto+Sans+Tamil:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -33,10 +48,18 @@
     <!-- Confetti Container -->
     <div class="confetti-container" id="confetti"></div>
 
-    <!-- Download FAB -->
-    <a class="download-fab" id="downloadFab" href="#download" title="Download Invitation">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    </a>
+    <!-- Floating Petals -->
+    <div class="floating-petals" id="floatingPetals"></div>
+
+    <!-- FAB Buttons -->
+    <div class="fab-container" id="fabContainer">
+        <a class="fab-btn location-fab" id="locationFab" href="https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6" target="_blank" rel="noopener" title="Venue Location">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </a>
+        <a class="fab-btn download-fab" id="downloadFab" href="javascript:void(0)" onclick="downloadInvitation()" title="Download Invitation">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </a>
+    </div>
 
     <!-- Language Toggle -->
     <div class="lang-toggle" id="langToggle">
@@ -363,77 +386,6 @@
                 <svg class="btn-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <span data-en="Open in Google Maps" data-ta="Google Maps-ல் திறக்க">Open in Google Maps</span>
             </a>
-        </div>
-    </section>
-
-    <!-- Wave Divider (inverted) -->
-    <div class="wave-divider inverted">
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0 0L48 15C96 30 192 60 288 75C384 90 480 90 576 82.5C672 75 768 60 864 52.5C960 45 1056 45 1152 52.5C1248 60 1344 75 1392 82.5L1440 90V0H0Z" fill="var(--maroon-dark)"/>
-        </svg>
-    </div>
-
-    <!-- Floral Background Decoration - Download -->
-    <div class="section-floral-bg download-floral">
-        <svg class="floral-bg-svg floral-left" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Vine -->
-            <path d="M80 0 Q100 60 80 120 Q55 180 90 240 Q120 300 80 360 Q50 390 80 400" stroke="rgba(60,187,177,0.07)" stroke-width="1.2" fill="none"/>
-            <!-- Leaves -->
-            <path d="M80 60 Q55 50 50 70 Q58 80 80 70" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M80 60 Q105 50 110 70 Q102 80 80 70" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M80 180 Q55 170 48 192 Q58 202 80 190" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M80 180 Q105 170 112 192 Q102 202 80 190" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M90 300 Q65 290 58 312 Q68 322 90 310" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <!-- Small flowers -->
-            <circle cx="80" cy="120" r="8" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="80" cy="120" r="3" fill="rgba(60,187,177,0.05)"/>
-            <circle cx="90" cy="240" r="6" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="90" cy="240" r="2.5" fill="rgba(60,187,177,0.05)"/>
-        </svg>
-        <svg class="floral-bg-svg floral-right" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M220 0 Q200 60 220 120 Q245 180 210 240 Q180 300 220 360 Q250 390 220 400" stroke="rgba(60,187,177,0.07)" stroke-width="1.2" fill="none"/>
-            <path d="M220 60 Q195 50 190 70 Q198 80 220 70" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M220 60 Q245 50 250 70 Q242 80 220 70" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M220 180 Q195 170 188 192 Q198 202 220 190" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <path d="M220 180 Q245 170 252 192 Q242 202 220 190" fill="rgba(60,187,177,0.04)" stroke="rgba(60,187,177,0.06)" stroke-width="0.5"/>
-            <circle cx="220" cy="120" r="8" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="220" cy="120" r="3" fill="rgba(60,187,177,0.05)"/>
-            <circle cx="210" cy="240" r="6" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="210" cy="240" r="2.5" fill="rgba(60,187,177,0.05)"/>
-        </svg>
-    </div>
-
-    <!-- Download Section -->
-    <section class="download" id="download">
-        <h2 class="section-title" data-en="Invitation Card" data-ta="அழைப்பிதழ்">Invitation Card</h2>
-        <div class="floral-divider">
-            <svg viewBox="0 0 400 40" fill="none">
-                <line x1="0" y1="20" x2="140" y2="20" stroke="var(--gold)" stroke-width="0.5" opacity="0.5"/>
-                <g transform="translate(200,20)">
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(0)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(45)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(90)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(135)"/>
-                    <circle r="4" fill="var(--gold)" opacity="0.4"/>
-                </g>
-                <line x1="260" y1="20" x2="400" y2="20" stroke="var(--gold)" stroke-width="0.5" opacity="0.5"/>
-            </svg>
-        </div>
-        <p class="download-desc" data-en="Download and share our wedding invitation" data-ta="எங்கள் திருமண அழைப்பிதழை பதிவிறக்கம் செய்து பகிரவும்">Download and share our wedding invitation</p>
-        <div class="download-card reveal-card">
-            <div class="download-preview">
-                <div class="preview-inner">
-                    <div class="preview-ornament">✦ ✦ ✦</div>
-                    <p class="preview-label" data-en="Wedding Invitation" data-ta="திருமண அழைப்பிதழ்">Wedding Invitation</p>
-                    <p class="preview-names">Anandkumar & Manimozhi</p>
-                    <p class="preview-date">April 11-12, 2026</p>
-                    <div class="preview-ornament">✦ ✦ ✦</div>
-                </div>
-            </div>
-            <button class="btn btn-download" onclick="downloadInvitation()">
-                <svg class="btn-svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span data-en="Download Invitation" data-ta="அழைப்பிதழ் பதிவிறக்கம்">Download Invitation</span>
-            </button>
         </div>
     </section>
 
