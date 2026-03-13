@@ -31,8 +31,11 @@
 
   /* ── Language Toggle ── */
   function initLanguage() {
-    const btn = document.getElementById('langToggle');
-    if (!btn) return;
+    const btn = document.getElementById('langToggleMobile');
+    const btnDesktop = document.getElementById('langToggleDesktop');
+    const btnFooter = document.getElementById('langToggleFooter');
+    const allBtns = [btn, btnDesktop, btnFooter].filter(Boolean);
+    if (!allBtns.length) return;
 
     let currentLang = 'en';
 
@@ -51,13 +54,16 @@
       document.body.classList.toggle('lang-ta', lang === 'ta');
 
       /* Button shows the OTHER language */
-      btn.textContent = lang === 'ta' ? 'EN' : '\u0BA4\u0BAE\u0BBF';
+      const label = lang === 'ta' ? 'EN' : '\u0BA4\u0BAE\u0BBF';
+      allBtns.forEach(b => b.textContent = label);
     }
 
-    btn.addEventListener('click', () => {
-      const next = currentLang === 'en' ? 'ta' : 'en';
-      window.location.hash = next === 'ta' ? 'ta' : '';
-      applyLang(next);
+    allBtns.forEach(b => {
+      b.addEventListener('click', () => {
+        const next = currentLang === 'en' ? 'ta' : 'en';
+        window.location.hash = next === 'ta' ? 'ta' : '';
+        applyLang(next);
+      });
     });
 
     /* Listen for hash changes (back/forward) */
@@ -81,23 +87,29 @@
 
   /* ── Countdowns ── */
   function initCountdowns() {
-    /* Main countdown */
-    const mainWrap = document.querySelector('.countdown-fixed');
-    if (!mainWrap) return;
+    const target = new Date('2026-04-11T19:00:00').getTime();
 
-    const mainTarget = new Date(mainWrap.dataset.date || '2026-04-11T19:00:00').getTime();
-    const dEl = mainWrap.querySelector('.days');
-    const hEl = mainWrap.querySelector('.hours');
-    const mEl = mainWrap.querySelector('.minutes');
-    const sEl = mainWrap.querySelector('.seconds');
+    /* Collect all countdown containers (footer + hero) */
+    const containers = document.querySelectorAll('.countdown-fixed, .countdown-sync');
+    if (!containers.length) return;
 
     function tick() {
       const now = Date.now();
-      const diff = Math.max(0, mainTarget - now);
-      if (dEl) dEl.textContent = String(Math.floor(diff / 864e5)).padStart(2, '0');
-      if (hEl) hEl.textContent = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
-      if (mEl) mEl.textContent = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
-      if (sEl) sEl.textContent = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
+      const diff = Math.max(0, target - now);
+      const d = String(Math.floor(diff / 864e5)).padStart(2, '0');
+      const h = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+      const m = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+      const s = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
+      containers.forEach(c => {
+        const dEl = c.querySelector('.days');
+        const hEl = c.querySelector('.hours');
+        const mEl = c.querySelector('.minutes');
+        const sEl = c.querySelector('.seconds');
+        if (dEl) dEl.textContent = d;
+        if (hEl) hEl.textContent = h;
+        if (mEl) mEl.textContent = m;
+        if (sEl) sEl.textContent = s;
+      });
     }
 
     tick();
@@ -117,6 +129,26 @@
     });
   }
 
+  /* ── Fixed footer on scroll (mobile) ── */
+  function initScrollFooter() {
+    const footer = document.getElementById('fixedFooter');
+    if (!footer) return;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (window.scrollY > 50) {
+            footer.classList.add('fixed-footer--visible');
+          } else {
+            footer.classList.remove('fixed-footer--visible');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
   /* ── Preloader ── */
   function initPreloader() {
     const preloader = document.getElementById('preloader');
@@ -124,20 +156,26 @@
     const groomCard = document.getElementById('groomCard');
     const brideCard = document.getElementById('brideCard');
 
-    if (!preloader) {
-      // No preloader element — show everything immediately
+    // Measure bride tag height and set CSS variable for SVG offset
+    const brideTag = brideCard ? brideCard.querySelector('.hero-person__tag') : null;
+    const brideTagH = brideTag ? brideTag.offsetHeight : 0;
+    document.documentElement.style.setProperty('--bride-tag-offset', brideTagH + 'px');
+
+    function showAll() {
       if (heroImg) heroImg.classList.add('hero-propose__img--visible');
       if (groomCard) groomCard.classList.add('show');
       if (brideCard) brideCard.classList.add('show');
+    }
+
+    if (!preloader) {
+      showAll();
       return;
     }
 
     const isEnabled = preloader.getAttribute('data-preloader') === 'true';
     if (!isEnabled) {
       preloader.classList.add('preloader--disabled');
-      if (heroImg) heroImg.classList.add('hero-propose__img--visible');
-      if (groomCard) groomCard.classList.add('show');
-      if (brideCard) brideCard.classList.add('show');
+      showAll();
       return;
     }
 
@@ -149,85 +187,38 @@
 
     if (lockPreloader) return;
 
-    const preloaderSvg = document.getElementById('preloaderSvg');
-    const heroTarget = document.getElementById('heroPropose');
+    function revealSequence() {
+      // 1. Show the hero SVG immediately (behind preloader, invisible to user)
+      //    It starts at scale(1.8) and will shrink to scale(1) via CSS transition
+      if (heroImg) heroImg.classList.add('hero-propose__img--visible');
 
-    function flyAndHide() {
-      if (!preloaderSvg || !heroTarget) {
-        // Fallback: just fade out and show everything
-        if (heroImg) heroImg.classList.add('hero-propose__img--visible');
+      // 2. Fade out the preloader overlay (dark background)
+      preloader.classList.add('preloader--hidden');
+
+      // 3. After overlay fades (600ms), animate cards in sequence
+      setTimeout(() => {
         if (groomCard) groomCard.classList.add('show');
-        if (brideCard) brideCard.classList.add('show');
-        preloader.classList.add('preloader--hidden');
-        document.body.classList.remove('preloader-active');
-        setTimeout(() => preloader.remove(), 700);
-        return;
-      }
+        setTimeout(() => {
+          if (brideCard) brideCard.classList.add('show');
+        }, 400);
 
-      // Measure positions
-      window.scrollTo(0, 0);
-      const svgRect = preloaderSvg.getBoundingClientRect();
-      const targetRect = heroTarget.getBoundingClientRect();
-
-      // Calculate the target size (match the hero-propose__img width)
-      const targetImgWidth = heroImg ? heroImg.offsetWidth || 160 : 160;
-
-      // Center-to-center translation
-      const svgCenterX = svgRect.left + svgRect.width / 2;
-      const svgCenterY = svgRect.top + svgRect.height / 2;
-      const targetCenterX = targetRect.left + targetRect.width / 2;
-      const targetCenterY = targetRect.top + targetRect.height / 2;
-
-      const dx = targetCenterX - svgCenterX;
-      const dy = targetCenterY - svgCenterY;
-      const scaleFactor = targetImgWidth / svgRect.width;
-
-      // Stop breathing animation, enable fly transition
-      preloaderSvg.classList.add('preloader__svg--flying');
-
-      // Fade out the dark background
-      preloader.classList.add('preloader--bg-fade');
-
-      // Apply the transform (fly + shrink to target position)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          preloaderSvg.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleFactor})`;
-
-          // After the fly transition (1.8s), crossfade to in-place hero SVG
-          setTimeout(() => {
-            // Fade out preloader SVG
-            preloaderSvg.style.opacity = '0';
-
-            // Reveal the actual hero propose SVG (scales up gently from CSS)
-            if (heroImg) heroImg.classList.add('hero-propose__img--visible');
-
-            // Sequence: groom card flies in from left → then bride from right
-            setTimeout(() => {
-              if (groomCard) groomCard.classList.add('show');
-              setTimeout(() => {
-                if (brideCard) brideCard.classList.add('show');
-              }, 600);
-            }, 500);
-
-            // Remove preloader from DOM after all transitions done
-            setTimeout(() => {
-              preloader.classList.add('preloader--hidden');
-              document.body.classList.remove('preloader-active');
-              setTimeout(() => preloader.remove(), 400);
-            }, 800);
-          }, 1800);
-        });
-      });
+        // 4. Unlock scroll and clean up preloader DOM
+        setTimeout(() => {
+          document.body.classList.remove('preloader-active');
+          setTimeout(() => preloader.remove(), 400);
+        }, 800);
+      }, 600);
     }
 
     let fired = false;
     function trigger() {
       if (fired) return;
       fired = true;
-      // Show preloader for 2 seconds, then start the fly transition
-      setTimeout(flyAndHide, 2000);
+      // Show preloader for 2 seconds, then start reveal
+      setTimeout(revealSequence, 2000);
     }
 
+    const preloaderSvg = document.getElementById('preloaderSvg');
     if (preloaderSvg) {
       preloaderSvg.addEventListener('load', trigger);
       preloaderSvg.addEventListener('error', trigger);
@@ -248,6 +239,7 @@
     initProgress();
     initCountdowns();
     initSmoothScroll();
+    initScrollFooter();
   });
 
   /* Reset scroll on refresh/navigate away */
