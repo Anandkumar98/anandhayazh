@@ -1,432 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Invitation - Anandkumar & Manimozhi</title>
-    <meta name="description" content="Wedding Invitation of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini — Reception: April 11, 2026 | Marriage: April 12, 2026 at Sri Lalita Mahal">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#091a30">
+  <meta name="description" content="Wedding Invitation – Anandkumar &amp; Yazhini | திருமண அழைப்பிதழ்">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Anandkumar &amp; Yazhini — Wedding Invitation</title>
 
-    <!-- Open Graph / Social Preview -->
-    <meta property="og:title" content="Wedding Invitation — Anandkumar & Manimozhi">
-    <meta property="og:description" content="You are cordially invited to the wedding of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini. Reception: April 11, 2026 | Marriage: April 12, 2026">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://anandhayazh.in/">
-    <meta property="og:image" content="https://anandhayazh.in/og-en.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:site_name" content="Anandkumar & Manimozhi Wedding">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Wedding Invitation — Anandkumar & Manimozhi">
-    <meta name="twitter:description" content="You are cordially invited to the wedding of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini">
-    <meta name="twitter:image" content="https://anandhayazh.in/og-en.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Engagement&family=Corinthia:wght@400;700&family=Kavivanar&family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&family=Noto+Sans+Tamil:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Preloader -->
-    <div class="preloader" id="preloader">
-        <div class="preloader-inner">
-            <div class="preloader-monogram">
-                <div class="preloader-rings">
-                    <div class="ring ring-1"></div>
-                    <div class="ring ring-2"></div>
-                </div>
-                <span class="monogram-text">AM</span>
-            </div>
-        </div>
+
+  <!-- ======================== PRELOADER ======================== -->
+  <div class="preloader" id="preloader" data-preloader="true">
+    <div class="preloader__content">
+      <img src="a-propose-y.svg" alt="" class="preloader__svg" id="preloaderSvg">
+    </div>
+  </div>
+
+  <!-- Scroll Progress -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ======================== HERO + COUPLE ======================== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-orb hero-orb--1"></div>
+      <div class="hero-orb hero-orb--2"></div>
+      <div class="hero-grain"></div>
     </div>
 
-    <!-- Floating Particles Container -->
-    <div class="particles" id="particles"></div>
+    <div class="hero-inner">
 
-    <!-- Confetti Container -->
-    <div class="confetti-container" id="confetti"></div>
+      <p class="hero-eyebrow anim anim--d1" data-en="Wedding Invitation" data-ta="திருமண அழைப்பிதழ்">Wedding Invitation</p>
 
-    <!-- Floating Petals -->
-    <div class="floating-petals" id="floatingPetals"></div>
+      <p class="hero-families anim anim--d1" data-en="Together with their families" data-ta="இரு குடும்பங்களும் இணைந்து">Together with their families</p>
 
-    <!-- FAB Buttons -->
-    <div class="fab-container" id="fabContainer">
-        <a class="fab-btn location-fab" id="locationFab" href="https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6" target="_blank" rel="noopener" title="Venue Location">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </a>
-        <a class="fab-btn download-fab" id="downloadFab" href="javascript:void(0)" onclick="downloadInvitation()" title="Download Invitation">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </a>
+      <!-- ── GROOM ── -->
+      <div class="hero-person anim anim--fly-left" id="groomCard">
+        <span class="hero-person__tag" data-en="The Groom" data-ta="மணமகன்">The Groom</span>
+        <div data-lang-block="en">
+          <h2 class="hero-person__name">Er. J. Anandkumar, B.Tech</h2>
+          <p class="hero-person__job">Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.</p>
+          <p class="hero-person__parents-line">S/o Mr. S. Jothimani &amp; Mrs. Chandra Jothimani</p>
+        </div>
+        <div data-lang-block="ta" style="display:none;">
+          <p class="hero-person__parents-line">திரு. S. ஜோதிமணி &amp; திருமதி. சந்ரா ஜோதிமணி அவர்களின் மகன்</p>
+          <h2 class="hero-person__name">Er. J. ஆனந்தகுமார், B.Tech</h2>
+          <p class="hero-person__job">Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.</p>
+        </div>
+      </div>
+
+      <!-- ── Propose SVG ── -->
+      <div class="hero-propose" id="heroPropose">
+        <img src="a-propose-y.svg" alt="A proposes Y" class="hero-propose__img">
+      </div>
+
+      <!-- ── BRIDE ── -->
+      <div class="hero-person anim anim--fly-right" id="brideCard">
+        <span class="hero-person__tag" data-en="The Bride" data-ta="மணமகள்">The Bride</span>
+        <div data-lang-block="en">
+          <h2 class="hero-person__name">Dr. S.A. Manimozhi @ Yazhini, B.S.M.S.</h2>
+          <p class="hero-person__parents-line">D/o Mr. P. Saravanan &amp; Mrs. Anjugam Saravanan</p>
+        </div>
+        <div data-lang-block="ta" style="display:none;">
+          <p class="hero-person__parents-line">திரு. P. சரவணன் &amp; திருமதி. அஞ்சுகம் சரவணன் அவர்களின் மகள்</p>
+          <h2 class="hero-person__name">Dr. S.A. மணிமொழி @ யாழினி, B.S.M.S.</h2>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="hero-divider anim anim--d3">
+        <svg width="200" height="12" viewBox="0 0 200 12" fill="none">
+          <line x1="0" y1="6" x2="80" y2="6" stroke="currentColor" stroke-width="0.5" opacity="0.25"></line>
+          <circle cx="100" cy="6" r="3" stroke="currentColor" stroke-width="0.5" fill="none" opacity="0.3"></circle>
+          <circle cx="100" cy="6" r="1" fill="currentColor" opacity="0.4"></circle>
+          <line x1="120" y1="6" x2="200" y2="6" stroke="currentColor" stroke-width="0.5" opacity="0.25"></line>
+        </svg>
+      </div>
+
+      <p class="hero-invite anim anim--d3" data-en="Cordially invite you to join us in celebrating the union of two souls on the auspicious day" data-ta="இந்த மங்களகரமான நாளில் இரு ஆன்மாக்களின் இணைவினை கொண்டாட தங்களை அன்புடன் அழைக்கின்றனர்">Cordially invite you to join us in celebrating the union of two souls on the auspicious day</p>
+
+      <div class="hero-date anim anim--d4">
+        <span data-en="April 11 &amp; 12, 2026" data-ta="ஏப்ரல் 11 &amp; 12, 2026">April 11 &amp; 12, 2026</span>
+      </div>
+
+      <a href="#events" class="hero-scroll anim anim--d4" aria-label="Scroll">
+        <span class="hero-scroll__text" data-en="View Details" data-ta="விவரங்கள்">View Details</span>
+        <svg width="18" height="28" viewBox="0 0 18 28" fill="none">
+          <rect x="1" y="1" width="16" height="26" rx="8" stroke="currentColor" stroke-width="1"></rect>
+          <circle class="hero-scroll__dot" cx="9" cy="9" r="2" fill="currentColor"></circle>
+        </svg>
+      </a>
     </div>
+  </section>
 
-    <!-- Language Toggle -->
-    <div class="lang-toggle" id="langToggle">
-        <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">English</button>
-        <button class="lang-btn" data-lang="ta" onclick="switchLanguage('ta')">தமிழ்</button>
+  <!-- ======================== EVENTS ======================== -->
+  <section class="section" id="events">
+    <div class="wrap">
+      <header class="sec-head anim">
+        <span class="sec-tag" data-en="Save The Date" data-ta="நாளை நினைவில் கொள்ளுங்கள்">Save The Date</span>
+        <h2 class="sec-title" data-en="Celebration Details" data-ta="விழா விவரங்கள்">Celebration Details</h2>
+      </header>
+
+      <p class="events-subtitle anim" data-en="We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception" data-ta="எங்கள் திருமண விழா மற்றும் வரவேற்புக்கு தங்கள் அருகிருப்பை மரியாதையுடன் வேண்டுகிறோம்">We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception</p>
+
+      <div class="events">
+        <!-- Reception -->
+        <article class="ev anim anim--pop anim--d1">
+          <div class="ev__badge" data-en="Reception" data-ta="வரவேற்பு">Reception</div>
+          <div class="ev__date-big">
+            <span class="ev__day">11</span>
+            <div class="ev__monthyr">
+              <span data-en="April 2026" data-ta="ஏப்ரல் 2026">April 2026</span>
+              <span data-en="Saturday" data-ta="சனிக்கிழமை">Saturday</span>
+            </div>
+          </div>
+          <div class="ev__details">
+            <div class="ev__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+              <span data-en="7:00 PM – 10:00 PM" data-ta="மாலை 7:00 – இரவு 10:00">7:00 PM – 10:00 PM</span>
+            </div>
+            <div class="ev__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span data-en="Sri Lalita Mahal" data-ta="ஸ்ரீ லலிதா மஹால்">Sri Lalita Mahal</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Marriage -->
+        <article class="ev ev--muhurtham anim anim--pop anim--d2">
+          <div class="ev__label" data-en="Muhurtham" data-ta="முகூர்த்தம்">Muhurtham</div>
+          <div class="ev__badge" data-en="Marriage" data-ta="திருமணம்">Marriage</div>
+          <div class="ev__date-big">
+            <span class="ev__day">12</span>
+            <div class="ev__monthyr">
+              <span data-en="April 2026" data-ta="ஏப்ரல் 2026">April 2026</span>
+              <span data-en="Sunday" data-ta="ஞாயிற்றுக்கிழமை">Sunday</span>
+            </div>
+          </div>
+          <div class="ev__details">
+            <div class="ev__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+              <span data-en="7:30 AM – 9:00 AM" data-ta="காலை 7:30 – 9:00">7:30 AM – 9:00 AM</span>
+            </div>
+            <div class="ev__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span data-en="Sri Lalita Mahal" data-ta="ஸ்ரீ லலிதா மஹால்">Sri Lalita Mahal</span>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
+  </section>
 
-    <!-- Scroll Progress Bar -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+  <!-- ======================== VENUE ======================== -->
+  <section class="section section--dark" id="venue">
+    <div class="wrap">
+      <header class="sec-head anim">
+        <span class="sec-tag" data-en="Location" data-ta="இடம்">Location</span>
+        <h2 class="sec-title" data-en="Venue" data-ta="மண்டபம்">Venue</h2>
+      </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg-shapes">
-            <div class="floating-shape shape-1"></div>
-            <div class="floating-shape shape-2"></div>
-            <div class="floating-shape shape-3"></div>
-            <div class="floating-shape shape-4"></div>
-            <div class="floating-shape shape-5"></div>
-        </div>
+      <p class="venue-name anim anim--d1" data-en="Sri Lalita Mahal" data-ta="ஸ்ரீ லலிதா மஹால்">Sri Lalita Mahal</p>
 
-        <!-- Decorative Corner SVGs -->
-        <svg class="corner-decor top-left" viewBox="0 0 200 200" fill="none">
-            <path d="M0 0 C50 0, 100 10, 150 50 C180 75, 195 120, 200 200" stroke="rgba(60,187,177,0.3)" stroke-width="1.5" fill="none"/>
-            <path d="M0 0 C40 5, 80 20, 120 60 C150 90, 170 130, 180 200" stroke="rgba(60,187,177,0.2)" stroke-width="1" fill="none"/>
-            <circle cx="150" cy="50" r="3" fill="rgba(60,187,177,0.4)"/>
-            <circle cx="120" cy="60" r="2" fill="rgba(60,187,177,0.3)"/>
-        </svg>
-        <svg class="corner-decor top-right" viewBox="0 0 200 200" fill="none">
-            <path d="M200 0 C150 0, 100 10, 50 50 C20 75, 5 120, 0 200" stroke="rgba(60,187,177,0.3)" stroke-width="1.5" fill="none"/>
-            <path d="M200 0 C160 5, 120 20, 80 60 C50 90, 30 130, 20 200" stroke="rgba(60,187,177,0.2)" stroke-width="1" fill="none"/>
-            <circle cx="50" cy="50" r="3" fill="rgba(60,187,177,0.4)"/>
-        </svg>
-        <svg class="corner-decor bottom-left" viewBox="0 0 200 200" fill="none">
-            <path d="M0 200 C50 200, 100 190, 150 150 C180 125, 195 80, 200 0" stroke="rgba(60,187,177,0.3)" stroke-width="1.5" fill="none"/>
-            <circle cx="150" cy="150" r="3" fill="rgba(60,187,177,0.4)"/>
-        </svg>
-        <svg class="corner-decor bottom-right" viewBox="0 0 200 200" fill="none">
-            <path d="M200 200 C150 200, 100 190, 50 150 C20 125, 5 80, 0 0" stroke="rgba(60,187,177,0.3)" stroke-width="1.5" fill="none"/>
-            <circle cx="50" cy="150" r="3" fill="rgba(60,187,177,0.4)"/>
-        </svg>
+      <div class="map anim anim--d2">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.3195382315257!2d79.83325767505967!3d11.952364388277092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5363debf7f0961%3A0x7b5f74124bc04a37!2sSri%20Lalita%20Mahal!5e0!3m2!1sen!2sin!4v1773374624560!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Venue"></iframe>
+      </div>
 
-        <div class="hero-content">
-            <div class="hero-monogram anim-hero">
-                <div class="hero-monogram-ring ring-inner"></div>
-                <div class="hero-monogram-ring ring-outer"></div>
-                <span class="hero-monogram-text">AM</span>
-            </div>
-            <p class="wedding-label anim-hero" data-en="Wedding Invitation" data-ta="திருமண அழைப்பிதழ்">Wedding Invitation</p>
-            <div class="mandala-ornament">
-                <svg viewBox="0 0 300 50" fill="none" class="mandala-svg">
-                    <line x1="0" y1="25" x2="90" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"></line>
-                    <circle cx="100" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"></circle>
-                    <circle cx="150" cy="25" r="8" stroke="rgba(60,187,177,0.7)" stroke-width="1" fill="none"></circle>
-                    <circle cx="150" cy="25" r="4" fill="rgba(60,187,177,0.3)"></circle>
-                    <circle cx="200" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"></circle>
-                    <line x1="210" y1="25" x2="300" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"></line>
-                </svg>
-            </div>
-            <p class="hero-tagline anim-hero" data-en="Together with their family," data-ta="தங்கள் குடும்பத்தினருடன் சேர்ந்து">Together with their family,</p>
-
-            <div class="names-container">
-                <div class="person-block anim-hero">
-                    <p class="parent-info" data-en="S/o Mr. S. Jothimani &amp; Mrs. Chandra Jothimani" data-ta-html="திரு. S. ஜோதிமணி &amp; திருமதி. சந்ரா ஜோதிமணி அவர்களின் மகன்">S/o Mr. S. Jothimani &amp; Mrs. Chandra Jothimani</p>
-                    <div class="name-line">
-                        <h1 class="groom-name" data-en="Er. J. Anandkumar" data-ta-html="<span class='en-keep'>Er. J.</span> ஆனந்தகுமார்">Er. J. Anandkumar</h1>
-                        <span class="degree-inline"> B.Tech</span>
-                    </div>
-                    <p class="person-detail en-keep">Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.</p>
-                </div>
-                <div class="ampersand-container anim-hero">
-                    <div class="ampersand-ring"></div>
-                    <span class="ampersand ">&amp;</span>
-                </div>
-                <div class="person-block anim-hero">
-                    <p class="parent-info" data-en="D/o Mr. P. Saravanan &amp; Mrs. Anjukam Saravanan" data-ta-html="திரு. P. சரவணன் &amp; திருமதி. அஞ்சுகம் சரவணன் அவர்களின் மகள்">D/o Mr. P. Saravanan &amp; Mrs. Anjukam Saravanan</p>
-                    <div class="name-line">
-                        <h1 class="bride-name" data-en="Dr. S.A. Manimozhi @ Yazhini" data-ta-html="<span class='en-keep'>Dr. S.A.</span> மணிமொழி @ யாழினி">Dr. S.A. Manimozhi @ Yazhini</h1>
-                        <span class="degree-inline"> B.S.M.S.</span>
-                    </div>
-                </div>
-            </div>
-
-            <p class="hero-closing anim-hero" data-en="holding their hands together on the auspicious day, we cordially invite you to join us in celebrating the union of two souls" data-ta="கை கோர்க்கும் அன் நன்னாளில் தாங்கள் தங்கள் சுற்றமும் நட்பும் சூழ வருகை தந்து மணமக்களை வாழ்த்தியருள வேண்டுகிறோம்">holding their hands together on the auspicious day, we cordially invite you to join us in celebrating the union of two souls.</p>
-
-            <div class="mandala-ornament">
-                <svg viewBox="0 0 300 50" fill="none" class="mandala-svg">
-                    <line x1="0" y1="25" x2="90" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"/>
-                    <circle cx="100" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"/>
-                    <circle cx="150" cy="25" r="8" stroke="rgba(60,187,177,0.7)" stroke-width="1" fill="none"/>
-                    <circle cx="150" cy="25" r="4" fill="rgba(60,187,177,0.3)"/>
-                    <circle cx="200" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"/>
-                    <line x1="210" y1="25" x2="300" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"/>
-                </svg>
-            </div>
-
-            <div class="scroll-indicator anim-hero">
-                <div class="scroll-arrow">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Wave Divider -->
-    <div class="wave-divider">
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0 120L48 105C96 90 192 60 288 45C384 30 480 30 576 37.5C672 45 768 60 864 67.5C960 75 1056 75 1152 67.5C1248 60 1344 45 1392 37.5L1440 30V120H0Z" fill="var(--cream)"/>
-        </svg>
+      <a class="btn anim anim--d3" href="https://maps.google.com/?q=Sri+Lalita+Mahal" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span data-en="Open in Google Maps" data-ta="Google Maps-இல் திறக்க">Open in Google Maps</span>
+      </a>
     </div>
+  </section>
 
-    <!-- Floral Background Decoration - Countdown -->
-    <div class="section-floral-bg">
-        <svg class="floral-bg-svg floral-left" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M60 0 Q80 50 60 100 Q40 150 70 200 Q100 250 70 300 Q40 350 65 400 Q90 450 60 500 Q30 550 60 600" stroke="rgba(60,187,177,0.08)" stroke-width="1" fill="none"/>
-            <circle cx="60" cy="100" r="20" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="70" cy="200" r="15" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="65" cy="400" r="18" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <path d="M40 80 Q60 90 50 110" stroke="rgba(60,187,177,0.05)" stroke-width="0.8" fill="none"/>
-            <path d="M80 80 Q60 90 70 110" stroke="rgba(60,187,177,0.05)" stroke-width="0.8" fill="none"/>
-            <ellipse cx="60" cy="300" rx="10" ry="18" stroke="rgba(60,187,177,0.05)" stroke-width="0.8" fill="none" transform="rotate(-15 60 300)"/>
-            <ellipse cx="60" cy="300" rx="10" ry="18" stroke="rgba(60,187,177,0.05)" stroke-width="0.8" fill="none" transform="rotate(15 60 300)"/>
-            <circle cx="45" cy="150" r="3" fill="rgba(60,187,177,0.06)"/>
-            <circle cx="85" cy="250" r="2" fill="rgba(60,187,177,0.05)"/>
-            <circle cx="50" cy="450" r="3" fill="rgba(60,187,177,0.06)"/>
-        </svg>
-        <svg class="floral-bg-svg floral-right" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M140 0 Q120 50 140 100 Q160 150 130 200 Q100 250 130 300 Q160 350 135 400 Q110 450 140 500 Q170 550 140 600" stroke="rgba(60,187,177,0.08)" stroke-width="1" fill="none"/>
-            <circle cx="140" cy="100" r="20" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="130" cy="200" r="15" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <circle cx="135" cy="400" r="18" stroke="rgba(60,187,177,0.06)" stroke-width="0.8" fill="none"/>
-            <ellipse cx="140" cy="300" rx="10" ry="18" stroke="rgba(60,187,177,0.05)" stroke-width="0.8" fill="none" transform="rotate(-15 140 300)"/>
-            <ellipse cx="140" cy="300" rx="10" ry="18" stroke="rgba(60,187,177,0.05)" stroke-width="0.8" fill="none" transform="rotate(15 140 300)"/>
-            <circle cx="155" cy="150" r="3" fill="rgba(60,187,177,0.06)"/>
-            <circle cx="115" cy="250" r="2" fill="rgba(60,187,177,0.05)"/>
-            <circle cx="150" cy="450" r="3" fill="rgba(60,187,177,0.06)"/>
-        </svg>
+  <!-- ======================== BLESSINGS ======================== -->
+  <section class="section" id="blessing">
+    <div class="wrap">
+      <header class="sec-head anim">
+        <span class="sec-tag" data-en="Blessings" data-ta="ஆசிகள்">Blessings</span>
+        <h2 class="sec-title" data-en="We look forward to celebrating with you!" data-ta="உங்களுடன் கொண்டாட ஆவலுடன் காத்திருக்கிறோம்!">We look forward to celebrating with you!</h2>
+      </header>
+
+      <div class="bless anim anim--d1">
+        <div data-lang-block="en">
+          <p class="bless__text">May the love you share today grow stronger with each passing year. May your journey together be filled with laughter, joy, and endless blessings.</p>
+        </div>
+        <div data-lang-block="ta" style="display:none;">
+          <p class="bless__text">இன்று நீங்கள் பகிர்ந்து கொள்ளும் அன்பு ஆண்டுதோறும் வலுப்பெறட்டும். உங்கள் கூட்டுப் பயணம் சிரிப்பு, மகிழ்ச்சி மற்றும் முடிவில்லா ஆசிகளால் நிரம்பட்டும்.</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Countdown Section -->
-    <section class="countdown-section" id="countdown-section">
-        <h2 class="section-title" data-en="Counting Down" data-ta="நாள் எண்ணிக்கை">Counting Down</h2>
-        <p class="countdown-subtitle" data-en="to our special day" data-ta="எங்கள் சிறப்பு நாளுக்கு">to our special day</p>
-        <div class="countdown" id="countdown">
-            <div class="countdown-item">
-                <div class="countdown-number" id="days">00</div>
-                <div class="countdown-label" data-en="Days" data-ta="நாட்கள்">Days</div>
-            </div>
-            <div class="countdown-separator">:</div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="hours">00</div>
-                <div class="countdown-label" data-en="Hours" data-ta="மணி">Hours</div>
-            </div>
-            <div class="countdown-separator">:</div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="minutes">00</div>
-                <div class="countdown-label" data-en="Minutes" data-ta="நிமிடம்">Minutes</div>
-            </div>
-            <div class="countdown-separator">:</div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="seconds">00</div>
-                <div class="countdown-label" data-en="Seconds" data-ta="வினாடி">Seconds</div>
-            </div>
-        </div>
-    </section>
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot__names">
+        <span data-en="Anandkumar" data-ta="ஆனந்தகுமார்">Anandkumar</span>
+        <span class="foot__amp">&amp;</span>
+        <span data-en="Yazhini" data-ta="யாழினி">Yazhini</span>
+      </div>
+      <p class="foot__date">April 2026</p>
+      <a class="foot__link" href="https://anandhayazh.in/" target="_blank" rel="noopener">anandhayazh.in</a>
+      <p class="foot__note" data-en="Made with love" data-ta="அன்புடன் உருவாக்கப்பட்டது">Made with love</p>
+    </div>
+  </footer>
 
-    <!-- Events Section -->
-    <section class="events" id="events">
-        <h2 class="section-title" data-en="Celebration Details" data-ta="விழா விவரங்கள்">Celebration Details</h2>
-        <p class="invitation-request" data-en="We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception" data-ta="எங்களது திருமண விழா மற்றும் வரவேற்பு நிகழ்வில் தங்களின் அன்பான வருகையை மனதாரக் கேட்டுக்கொள்கிறோம்">We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception</p>
+  <!-- ======================== FIXED FOOTER BAR ======================== -->
+  <div class="fixed-footer">
+      <!-- Left: Language Toggle -->
+       <button class="lang-toggle" id="langToggle" aria-label="Switch language">தமி</button>
+       
+       <!-- Center: Countdown -->
+       <div class="ff__countdown countdown-fixed" data-date="2026-04-11T19:00:00">
+        <div class="cdf"><span class="cdf__n days">00</span><span class="cdf__l" data-en="D" data-ta="நா">D</span></div>
+        <span class="cdf__sep">:</span>
+        <div class="cdf"><span class="cdf__n hours">00</span><span class="cdf__l" data-en="H" data-ta="ம">H</span></div>
+        <span class="cdf__sep">:</span>
+        <div class="cdf"><span class="cdf__n minutes">00</span><span class="cdf__l" data-en="M" data-ta="நி">M</span></div>
+        <span class="cdf__sep">:</span>
+        <div class="cdf"><span class="cdf__n seconds">00</span><span class="cdf__l" data-en="S" data-ta="வி">S</span></div>
+      </div>
+      
+      <!-- Right: Language Toggle -->
+      <a class="ff__loc" href="https://maps.google.com/?q=Sri+Lalita+Mahal" target="_blank" rel="noopener noreferrer" aria-label="Open venue in Google Maps">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      </a>
+  </div>
 
-        <div class="floral-divider">
-            <svg viewBox="0 0 400 40" fill="none">
-                <line x1="0" y1="20" x2="140" y2="20" stroke="var(--gold)" stroke-width="0.5" opacity="0.5"/>
-                <g transform="translate(200,20)">
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(0)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(45)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(90)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6" transform="rotate(135)"/>
-                    <circle r="4" fill="var(--gold)" opacity="0.4"/>
-                </g>
-                <line x1="260" y1="20" x2="400" y2="20" stroke="var(--gold)" stroke-width="0.5" opacity="0.5"/>
-            </svg>
-        </div>
+  <script src="script.js"></script>
 
-        <div class="events-grid">
-            <!-- Reception -->
-            <div class="event-card glass-card reveal-card">
-                <div class="card-shimmer"></div>
-                <div class="event-badge">Save the Date</div>
-                <div class="event-icon-wrap">
-                    <div class="event-icon-bg"></div>
-                    <div class="event-icon couple-icon">
-                        <svg viewBox="0 0 120 100" width="64" height="54" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Groom -->
-                            <circle cx="40" cy="20" r="9" fill="var(--gold-light)" stroke="var(--gold-dark)" stroke-width="1"/>
-                            <!-- Groom hair -->
-                            <path d="M32 18 Q34 10 40 10 Q46 10 48 18" fill="var(--maroon-dark)" stroke="none"/>
-                            <!-- Groom body (suit) -->
-                            <path d="M40 29 L30 34 L28 70 L52 70 L50 34 Z" fill="var(--maroon)" stroke="var(--maroon-dark)" stroke-width="0.5"/>
-                            <!-- Groom tie -->
-                            <path d="M40 29 L38 42 L40 45 L42 42 Z" fill="var(--gold)" opacity="0.9"/>
-                            <!-- Groom collar -->
-                            <path d="M35 29 L40 35 L45 29" stroke="var(--gold-light)" stroke-width="0.8" fill="none"/>
-                            <!-- Bride -->
-                            <circle cx="75" cy="20" r="9" fill="var(--gold-light)" stroke="var(--gold-dark)" stroke-width="1"/>
-                            <!-- Bride hair -->
-                            <path d="M65 19 Q67 8 75 8 Q83 8 85 19" fill="var(--maroon-dark)" stroke="none"/>
-                            <ellipse cx="75" cy="10" rx="7" ry="3" fill="var(--maroon-dark)" opacity="0.6"/>
-                            <!-- Bride dress -->
-                            <path d="M75 29 C63 32 58 50 55 70 L95 70 C92 50 87 32 75 29Z" fill="var(--gold)" stroke="var(--gold-dark)" stroke-width="0.5"/>
-                            <!-- Bride dupatta/veil -->
-                            <path d="M68 25 Q60 35 58 55" stroke="var(--gold-light)" stroke-width="1.5" fill="none" opacity="0.5"/>
-                            <path d="M82 25 Q90 35 92 55" stroke="var(--gold-light)" stroke-width="1.5" fill="none" opacity="0.5"/>
-                            <!-- Held hands (centered) -->
-                            <path d="M50 52 Q57 42 55 50 L60 48 Q58 44 65 52" stroke="var(--gold-light)" stroke-width="2" fill="var(--gold-light)" opacity="0.9"/>
-                            <!-- Small heart above hands -->
-                            <path d="M57 36 C55 33 51 33 51 36 C51 39 57 42 57 42 C57 42 63 39 63 36 C63 33 59 33 57 36Z" fill="var(--gold)" opacity="0.6"/>
-                        </svg>
-                    </div>
-                </div>
-                <h3 class="event-name" data-en="Reception" data-ta="வரவேற்பு">Reception</h3>
-                <div class="event-date">
-                    <span class="date-day">11</span>
-                    <div class="date-details">
-                        <span class="date-month" data-en="April 2026" data-ta="ஏப்ரல் 2026">April 2026</span>
-                        <span class="date-weekday" data-en="Saturday" data-ta="சனிக்கிழமை">Saturday</span>
-                    </div>
-                </div>
-                <div class="event-time-wrap">
-                    <svg class="time-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    <p class="event-time" data-en="7:00 PM onwards" data-ta="மாலை 7:00 மணி முதல்">7:00 PM onwards</p>
-                </div>
-                <button class="btn btn-calendar" onclick="addToCalendar('reception')">
-                    <svg class="btn-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    <span data-en="Add to Calendar" data-ta="நாள்காட்டியில் சேர்">Add to Calendar</span>
-                </button>
-            </div>
-
-            <!-- Marriage -->
-            <div class="event-card glass-card reveal-card">
-                <div class="card-shimmer"></div>
-                <div class="event-badge" data-en="Muhurtham" data-ta="முகூர்த்தம்">Muhurtham</div>
-                <div class="event-icon-wrap">
-                    <div class="event-icon-bg"></div>
-                    <div class="event-icon mangalyam-icon">
-                        <svg viewBox="0 0 100 100" width="56" height="56" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Thali cord -->
-                            <path d="M15 28 Q30 18 50 22 Q70 18 85 28" stroke="#3cbbb1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                            <!-- Pendant body -->
-                            <path d="M38 38 L50 26 L62 38 L56 52 L44 52 Z" fill="#3cbbb1" stroke="#2a9d94" stroke-width="1.5"/>
-                            <!-- Inner design -->
-                            <circle cx="50" cy="40" r="5" fill="#8eddd6" stroke="#2a9d94" stroke-width="1"/>
-                            <circle cx="50" cy="40" r="2" fill="#1a5276"/>
-                            <!-- Bottom pendant drop -->
-                            <ellipse cx="50" cy="56" rx="4" ry="5" fill="#3cbbb1" stroke="#2a9d94" stroke-width="1"/>
-                            <circle cx="50" cy="63" r="2.5" fill="#8eddd6" stroke="#2a9d94" stroke-width="0.8"/>
-                            <!-- Side details -->
-                            <circle cx="42" cy="44" r="1.5" fill="#8eddd6"/>
-                            <circle cx="58" cy="44" r="1.5" fill="#8eddd6"/>
-                        </svg>
-                    </div>
-                </div>
-                <h3 class="event-name" data-en="Marriage" data-ta="திருமணம்">Marriage</h3>
-                <div class="event-date">
-                    <span class="date-day">12</span>
-                    <div class="date-details">
-                        <span class="date-month" data-en="April 2026" data-ta="ஏப்ரல் 2026">April 2026</span>
-                        <span class="date-weekday" data-en="Sunday" data-ta="ஞாயிற்றுக்கிழமை">Sunday</span>
-                    </div>
-                </div>
-                <div class="event-time-wrap">
-                    <svg class="time-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    <p class="event-time" data-en="7:30 AM to 9:00 AM" data-ta="காலை 7:30 முதல் 9:00 வரை">7:30 AM to 9:00 AM</p>
-                </div>
-                <button class="btn btn-calendar" onclick="addToCalendar('marriage')">
-                    <svg class="btn-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    <span data-en="Add to Calendar" data-ta="நாள்காட்டியில் சேர்">Add to Calendar</span>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Venue Section -->
-    <section class="venue" id="venue">
-        <div class="venue-bg-pattern"></div>
-        <h2 class="section-title light" data-en="Venue" data-ta="திருமண மண்டபம்">Venue</h2>
-
-        <div class="floral-divider light">
-            <svg viewBox="0 0 400 40" fill="none">
-                <line x1="0" y1="20" x2="140" y2="20" stroke="var(--gold-light)" stroke-width="0.5" opacity="0.5"/>
-                <g transform="translate(200,20)">
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.6" transform="rotate(0)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.6" transform="rotate(45)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.6" transform="rotate(90)"/>
-                    <ellipse rx="8" ry="14" fill="none" stroke="var(--gold-light)" stroke-width="0.8" opacity="0.6" transform="rotate(135)"/>
-                    <circle r="4" fill="var(--gold-light)" opacity="0.4"/>
-                </g>
-                <line x1="260" y1="20" x2="400" y2="20" stroke="var(--gold-light)" stroke-width="0.5" opacity="0.5"/>
-            </svg>
-        </div>
-
-        <div class="venue-card glass-card-dark reveal-card">
-            <div class="venue-icon-wrap">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                </svg>
-            </div>
-            <h3 class="venue-name">Sri Lalita Mahal</h3>
-            <div class="venue-map">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1228.684669871806!2d79.8344218!3d11.9516966!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5363debf7f0961%3A0x7b5f74124bc04a37!2sSri%20Lalita%20Mahal!5e1!3m2!1sen!2sin!4v1773119248157!5m2!1sen!2sin"
-                    width="100%" 
-                    height="300" 
-                    style="border:0; border-radius: 12px;" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
-            <a href="https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6" target="_blank" rel="noopener" class="btn btn-maps">
-                <svg class="btn-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span data-en="Open in Google Maps" data-ta="Google Maps-ல் திறக்க">Open in Google Maps</span>
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-hearts" id="footerHearts"></div>
-        <div class="footer-content">
-            <div class="mandala-ornament">
-                <svg viewBox="0 0 300 50" fill="none" class="mandala-svg">
-                    <line x1="0" y1="25" x2="90" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"/>
-                    <circle cx="100" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"/>
-                    <circle cx="150" cy="25" r="8" stroke="rgba(60,187,177,0.7)" stroke-width="1" fill="none"/>
-                    <circle cx="150" cy="25" r="4" fill="rgba(60,187,177,0.3)"/>
-                    <circle cx="200" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"/>
-                    <line x1="210" y1="25" x2="300" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"/>
-                </svg>
-            </div>
-            <p class="footer-text" data-en="We look forward to celebrating with you!" data-ta="உங்களுடன் கொண்டாட ஆவலுடன் எதிர்பார்க்கிறோம்!">We look forward to celebrating with you!</p>
-            <p class="footer-names">Anandkumar & Manimozhi</p>
-            <div class="footer-date">April 2026</div>
-            <div class="mandala-ornament">
-                <svg viewBox="0 0 300 50" fill="none" class="mandala-svg">
-                    <line x1="0" y1="25" x2="90" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"/>
-                    <circle cx="100" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"/>
-                    <circle cx="150" cy="25" r="8" stroke="rgba(60,187,177,0.7)" stroke-width="1" fill="none"/>
-                    <circle cx="150" cy="25" r="4" fill="rgba(60,187,177,0.3)"/>
-                    <circle cx="200" cy="25" r="4" stroke="rgba(60,187,177,0.6)" stroke-width="0.8" fill="none"/>
-                    <line x1="210" y1="25" x2="300" y2="25" stroke="rgba(60,187,177,0.4)" stroke-width="0.5"/>
-                </svg>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scroll to Top -->
-    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-    </button>
-
-    <!-- Hidden canvas -->
-    <canvas id="invitationCanvas" style="display:none;"></canvas>
-
-    <script src="script.js"></script>
 </body>
 </html>

@@ -1,971 +1,257 @@
-// ===== Language Management =====
-let currentLang = 'en';
+/* ==============================================
+   WEDDING INVITATION — Script
+   ============================================== */
 
-function setLanguage(lang) {
-    currentLang = lang;
+(function () {
+  'use strict';
 
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
+  /* ── Scroll reset: prevent browser restoring scroll position on refresh ── */
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
+  /* ── Scroll-triggered Animations ── */
+  function initAnimations() {
+    const els = document.querySelectorAll('.anim');
+    if (!els.length) return;
+
+    /* Hero elements: show immediately (except groom/bride cards and propose — they animate after preloader) */
+    document.querySelectorAll('.hero .anim').forEach(el => {
+      if (el.id === 'groomCard' || el.id === 'brideCard' || el.id === 'heroPropose') return;
+      el.classList.add('show');
     });
 
-    document.body.classList.toggle('lang-ta', lang === 'ta');
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } }),
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+    els.forEach(el => { if (!el.closest('.hero')) io.observe(el); });
+  }
 
-    document.querySelectorAll('[data-en]').forEach(el => {
-        // Check if element has HTML variant for Tamil (mixed English+Tamil)
-        if (lang === 'ta' && el.hasAttribute('data-ta-html')) {
-            el.innerHTML = el.getAttribute('data-ta-html');
-        } else {
-            const text = el.getAttribute(`data-${lang}`) || el.getAttribute('data-en');
-            if (text) el.textContent = text;
-        }
+  /* ── Language Toggle ── */
+  function initLanguage() {
+    const btn = document.getElementById('langToggle');
+    if (!btn) return;
+
+    let currentLang = 'en';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      const key = lang === 'ta' ? 'ta' : 'en';
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + key) || el.getAttribute('data-en');
+      });
+
+      /* Toggle data-lang-block sections (blessings etc.) */
+      document.querySelectorAll('[data-lang-block]').forEach(el => {
+        el.style.display = el.getAttribute('data-lang-block') === key ? '' : 'none';
+      });
+
+      document.body.classList.toggle('lang-ta', lang === 'ta');
+
+      /* Button shows the OTHER language */
+      btn.textContent = lang === 'ta' ? 'EN' : '\u0BA4\u0BAE\u0BBF';
+    }
+
+    btn.addEventListener('click', () => {
+      const next = currentLang === 'en' ? 'ta' : 'en';
+      window.location.hash = next === 'ta' ? 'ta' : '';
+      applyLang(next);
     });
-}
 
-// Switch language and update hash
-function switchLanguage(lang) {
-    window.location.hash = lang === 'ta' ? '#ta' : '';
-    setLanguage(lang);
-}
-
-function initLanguage() {
-    const hash = window.location.hash;
-    if (hash === '#ta') {
-        setLanguage('ta');
-    } else {
-        setLanguage('en');
-    }
-}
-
-// ===== Preloader =====
-function initPreloader() {
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            const preloader = document.getElementById('preloader');
-            preloader.classList.add('hidden');
-            // Launch confetti after preloader
-            setTimeout(launchConfetti, 300);
-        }, 1500);
+    /* Listen for hash changes (back/forward) */
+    window.addEventListener('hashchange', () => {
+      applyLang(window.location.hash === '#ta' ? 'ta' : 'en');
     });
-}
 
-// ===== Confetti Burst =====
-function launchConfetti() {
-    const container = document.getElementById('confetti');
-    const colors = ['#3cbbb1', '#8eddd6', '#2a9d94', '#6be0d4', '#2ecc71', '#00b4d8', '#fff'];
-    const count = 80;
+    /* Initialize based on URL hash */
+    applyLang(window.location.hash === '#ta' ? 'ta' : 'en');
+  }
 
-    for (let i = 0; i < count; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.width = (Math.random() * 8 + 5) + 'px';
-        piece.style.height = (Math.random() * 8 + 5) + 'px';
-        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        piece.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
-        piece.style.animationDelay = (Math.random() * 0.8) + 's';
-        piece.style.opacity = Math.random() * 0.7 + 0.3;
-        container.appendChild(piece);
+  /* ── Progress Bar ── */
+  function initProgress() {
+    const bar = document.querySelector('.progress-bar');
+    if (!bar) return;
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+    }, { passive: true });
+  }
+
+  /* ── Countdowns ── */
+  function initCountdowns() {
+    /* Main countdown */
+    const mainWrap = document.querySelector('.countdown-fixed');
+    if (!mainWrap) return;
+
+    const mainTarget = new Date(mainWrap.dataset.date || '2026-04-11T19:00:00').getTime();
+    const dEl = mainWrap.querySelector('.days');
+    const hEl = mainWrap.querySelector('.hours');
+    const mEl = mainWrap.querySelector('.minutes');
+    const sEl = mainWrap.querySelector('.seconds');
+
+    function tick() {
+      const now = Date.now();
+      const diff = Math.max(0, mainTarget - now);
+      if (dEl) dEl.textContent = String(Math.floor(diff / 864e5)).padStart(2, '0');
+      if (hEl) hEl.textContent = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+      if (mEl) mEl.textContent = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+      if (sEl) sEl.textContent = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
     }
 
-    // Clean up confetti after animation
-    setTimeout(() => {
-        container.innerHTML = '';
-    }, 5000);
-}
+    tick();
+    setInterval(tick, 1000);
+  }
 
-// ===== Floating Particles =====
-function initParticles() {
-    const container = document.getElementById('particles');
-    const particleCount = window.innerWidth < 768 ? 15 : 30;
-
-    for (let i = 0; i < particleCount; i++) {
-        createParticle(container);
-    }
-}
-
-function createParticle(container) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-
-    const size = Math.random() * 4 + 2;
-    const isGold = Math.random() > 0.3;
-    const color = isGold
-        ? `rgba(60, 187, 177, ${Math.random() * 0.4 + 0.1})`
-        : `rgba(255, 255, 255, ${Math.random() * 0.2 + 0.05})`;
-
-    particle.style.width = size + 'px';
-    particle.style.height = size + 'px';
-    particle.style.background = color;
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
-    particle.style.animationDelay = (Math.random() * 10) + 's';
-
-    if (Math.random() > 0.6) {
-        particle.style.boxShadow = `0 0 ${size * 2}px ${color}`;
-    }
-
-    container.appendChild(particle);
-}
-
-// ===== Countdown Timer =====
-function initCountdown() {
-    // Marriage ceremony: April 12, 2026, 7:30 AM IST
-    const weddingDate = new Date('2026-04-12T07:30:00+05:30');
-    let countdownInterval = null;
-
-    function showCountdownFinished() {
-        const countdownEl = document.getElementById('countdown');
-        if (countdownEl) {
-            const lang = document.body.classList.contains('lang-ta') ? 'ta' : 'en';
-            const message = lang === 'ta'
-                ? '🎉 இனிய திருமண நாள் வந்தது! 🎉'
-                : '🎉 The Celebration Has Begun! 🎉';
-            countdownEl.innerHTML = `<div class="countdown-finished" data-en="🎉 The Celebration Has Begun! 🎉" data-ta="🎉 இனிய திருமண நாள் வந்தது! 🎉">${message}</div>`;
+  /* ── Smooth scroll for # links ── */
+  function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        // Also update the subtitle
-        const subtitle = document.querySelector('.countdown-subtitle');
-        if (subtitle) {
-            subtitle.setAttribute('data-en', 'Wishing the couple a blessed union!');
-            subtitle.setAttribute('data-ta', 'மணமக்களுக்கு இறைவன் அருள் நிறைந்திருக்கட்டும்!');
-            const lang = document.body.classList.contains('lang-ta') ? 'ta' : 'en';
-            subtitle.textContent = lang === 'ta'
-                ? 'மணமக்களுக்கு இறைவன் அருள் நிறைந்திருக்கட்டும்!'
-                : 'Wishing the couple a blessed union!';
-        }
+      });
+    });
+  }
+
+  /* ── Preloader ── */
+  function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const heroImg = document.querySelector('.hero-propose__img');
+    const groomCard = document.getElementById('groomCard');
+    const brideCard = document.getElementById('brideCard');
+
+    if (!preloader) {
+      // No preloader element — show everything immediately
+      if (heroImg) heroImg.classList.add('hero-propose__img--visible');
+      if (groomCard) groomCard.classList.add('show');
+      if (brideCard) brideCard.classList.add('show');
+      return;
     }
 
-    function updateCountdown() {
-        const now = new Date();
-        const diff = weddingDate - now;
-
-        if (diff <= 0) {
-            showCountdownFinished();
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
-            return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        animateNumber('days', days);
-        animateNumber('hours', hours);
-        animateNumber('minutes', minutes);
-        animateNumber('seconds', seconds);
+    const isEnabled = preloader.getAttribute('data-preloader') === 'true';
+    if (!isEnabled) {
+      preloader.classList.add('preloader--disabled');
+      if (heroImg) heroImg.classList.add('hero-propose__img--visible');
+      if (groomCard) groomCard.classList.add('show');
+      if (brideCard) brideCard.classList.add('show');
+      return;
     }
 
-    function animateNumber(id, value) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const newVal = String(value).padStart(2, '0');
-        if (el.textContent !== newVal) {
-            el.style.transform = 'translateY(-5px)';
-            el.style.opacity = '0.5';
+    // Lock preloader open when ?preload=true is in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lockPreloader = urlParams.get('preload') === 'true';
+
+    document.body.classList.add('preloader-active');
+
+    if (lockPreloader) return;
+
+    const preloaderSvg = document.getElementById('preloaderSvg');
+    const heroTarget = document.getElementById('heroPropose');
+
+    function flyAndHide() {
+      if (!preloaderSvg || !heroTarget) {
+        // Fallback: just fade out and show everything
+        if (heroImg) heroImg.classList.add('hero-propose__img--visible');
+        if (groomCard) groomCard.classList.add('show');
+        if (brideCard) brideCard.classList.add('show');
+        preloader.classList.add('preloader--hidden');
+        document.body.classList.remove('preloader-active');
+        setTimeout(() => preloader.remove(), 700);
+        return;
+      }
+
+      // Measure positions
+      window.scrollTo(0, 0);
+      const svgRect = preloaderSvg.getBoundingClientRect();
+      const targetRect = heroTarget.getBoundingClientRect();
+
+      // Calculate the target size (match the hero-propose__img width)
+      const targetImgWidth = heroImg ? heroImg.offsetWidth || 160 : 160;
+
+      // Center-to-center translation
+      const svgCenterX = svgRect.left + svgRect.width / 2;
+      const svgCenterY = svgRect.top + svgRect.height / 2;
+      const targetCenterX = targetRect.left + targetRect.width / 2;
+      const targetCenterY = targetRect.top + targetRect.height / 2;
+
+      const dx = targetCenterX - svgCenterX;
+      const dy = targetCenterY - svgCenterY;
+      const scaleFactor = targetImgWidth / svgRect.width;
+
+      // Stop breathing animation, enable fly transition
+      preloaderSvg.classList.add('preloader__svg--flying');
+
+      // Fade out the dark background
+      preloader.classList.add('preloader--bg-fade');
+
+      // Apply the transform (fly + shrink to target position)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          preloaderSvg.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleFactor})`;
+
+          // After the fly transition (1.8s), crossfade to in-place hero SVG
+          setTimeout(() => {
+            // Fade out preloader SVG
+            preloaderSvg.style.opacity = '0';
+
+            // Reveal the actual hero propose SVG (scales up gently from CSS)
+            if (heroImg) heroImg.classList.add('hero-propose__img--visible');
+
+            // Sequence: groom card flies in from left → then bride from right
             setTimeout(() => {
-                el.textContent = newVal;
-                el.style.transform = 'translateY(0)';
-                el.style.opacity = '1';
-            }, 150);
-        }
-    }
+              if (groomCard) groomCard.classList.add('show');
+              setTimeout(() => {
+                if (brideCard) brideCard.classList.add('show');
+              }, 600);
+            }, 500);
 
-    updateCountdown();
-    countdownInterval = setInterval(updateCountdown, 1000);
-}
-
-// ===== Scroll Progress Bar =====
-function initScrollProgress() {
-    const progressBar = document.getElementById('scrollProgress');
-
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = (scrollTop / docHeight) * 100;
-        progressBar.style.width = progress + '%';
-    }, { passive: true });
-}
-
-// ===== Scroll-triggered Animations =====
-function initScrollReveal() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
+            // Remove preloader from DOM after all transitions done
+            setTimeout(() => {
+              preloader.classList.add('preloader--hidden');
+              document.body.classList.remove('preloader-active');
+              setTimeout(() => preloader.remove(), 400);
+            }, 800);
+          }, 1800);
         });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    document.querySelectorAll('.reveal-card, .section-title, .invitation-request').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-// ===== Language Toggle Scroll State =====
-function initLangToggleScroll() {
-    const toggle = document.getElementById('langToggle');
-    const fabBtns = document.querySelectorAll('.fab-btn');
-    const hero = document.getElementById('hero');
-
-    const observer = new IntersectionObserver(([entry]) => {
-        const scrolled = !entry.isIntersecting;
-        toggle.classList.toggle('scrolled', scrolled);
-        fabBtns.forEach(btn => btn.classList.toggle('scrolled', scrolled));
-    }, { threshold: 0.3 });
-
-    observer.observe(hero);
-}
-
-// ===== Scroll to Top Button =====
-function initScrollTop() {
-    const btn = document.getElementById('scrollTop');
-
-    window.addEventListener('scroll', () => {
-        btn.classList.toggle('visible', window.scrollY > 600);
-    }, { passive: true });
-}
-
-// ===== Footer Floating Hearts =====
-function initFooterHearts() {
-    const container = document.getElementById('footerHearts');
-    const hearts = ['♥', '♡', '❤'];
-
-    function createHeart() {
-        const heart = document.createElement('div');
-        heart.className = 'footer-heart';
-        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 16 + 10) + 'px';
-        heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
-        heart.style.animationDelay = (Math.random() * 2) + 's';
-        container.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 8000);
+      });
     }
 
-    // Observe footer visibility
-    const footer = document.querySelector('.footer');
-    const observer = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(createHeart, i * 400);
-            }
-            // Continue creating hearts while visible
-            const interval = setInterval(() => {
-                if (!entry.isIntersecting) {
-                    clearInterval(interval);
-                    return;
-                }
-                createHeart();
-            }, 1500);
+    let fired = false;
+    function trigger() {
+      if (fired) return;
+      fired = true;
+      // Show preloader for 2 seconds, then start the fly transition
+      setTimeout(flyAndHide, 2000);
+    }
 
-            // Stop after leaving viewport
-            const cleanup = new IntersectionObserver(([e]) => {
-                if (!e.isIntersecting) {
-                    clearInterval(interval);
-                    cleanup.disconnect();
-                }
-            });
-            cleanup.observe(footer);
-        }
-    }, { threshold: 0.2 });
-
-    observer.observe(footer);
-}
-
-// ===== Add to Calendar (Native Deeplinks) =====
-function addToCalendar(eventType) {
-    let event;
-
-    if (eventType === 'reception') {
-        event = {
-            title: currentLang === 'ta'
-                ? 'வரவேற்பு - ஆனந்தகுமார் & மணிமொழி'
-                : 'Reception - Anandkumar & Manimozhi',
-            description: currentLang === 'ta'
-                ? 'Er. J. ஆனந்தகுமார் & Dr. S.A. மணிமொழி @ யாழினி அவர்களின் வரவேற்பு விழா'
-                : 'Reception of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini',
-            location: 'Sri Lalita Mahal',
-            // Local times for Android intent (milliseconds)
-            beginDate: new Date('2026-04-11T19:00:00+05:30'),
-            endDate: new Date('2026-04-11T23:00:00+05:30'),
-            // For ICS / Google Cal
-            dtStart: '20260411T190000',
-            dtEnd: '20260411T220000',
-            // All-day fallback dates
-            dateStart: '20260411',
-            dateEnd: '20260412',
-        };
+    if (preloaderSvg) {
+      preloaderSvg.addEventListener('load', trigger);
+      preloaderSvg.addEventListener('error', trigger);
+      if (preloaderSvg.complete) trigger();
     } else {
-        event = {
-            title: currentLang === 'ta'
-                ? 'திருமணம் - ஆனந்தகுமார் & மணிமொழி'
-                : 'Marriage - Anandkumar & Manimozhi',
-            description: currentLang === 'ta'
-                ? 'Er. J. ஆனந்தகுமார் & Dr. S.A. மணிமொழி @ யாழினி அவர்களின் திருமண விழா'
-                : 'Marriage ceremony of Er. J. Anandkumar & Dr. S.A. Manimozhi @ Yazhini',
-            location: 'Sri Lalita Mahal',
-            beginDate: new Date('2026-04-12T07:30:00+05:30'),
-            endDate: new Date('2026-04-12T09:00:00+05:30'),
-            dtStart: '20260412T073000',
-            dtEnd: '20260412T090000',
-            dateStart: '20260412',
-            dateEnd: '20260413',
-        };
+      trigger();
     }
-
-    const icsData = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Wedding//EN',
-        'CALSCALE:GREGORIAN',
-        'METHOD:PUBLISH',
-        'BEGIN:VEVENT',
-        `SUMMARY:${event.title}`,
-        `DTSTART;TZID=Asia/Kolkata:${event.dtStart}`,
-        `DTEND;TZID=Asia/Kolkata:${event.dtEnd}`,
-        `DESCRIPTION:${event.description}`,
-        `LOCATION:${event.location}`,
-        `URL:https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6`,
-        'STATUS:CONFIRMED',
-        'BEGIN:VALARM',
-        'TRIGGER:-PT1H',
-        'ACTION:DISPLAY',
-        `DESCRIPTION:${event.title} in 1 hour`,
-        'END:VALARM',
-        'END:VEVENT',
-        'END:VCALENDAR'
-    ].join('\r\n');
-
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    const isMobile = /android|iPad|iPhone|iPod/i.test(userAgent);
-
-    if (isMobile) {
-        // Mobile: data URI opens native calendar app directly
-        window.location.href = `data:text/calendar;charset=utf8,${encodeURIComponent(icsData)}`;
-    } else {
-        // Desktop: download .ics file
-        const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${eventType}-anandkumar-manimozhi.ics`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-}
-
-// ===== Download Invitation Card =====
-async function downloadInvitation() {
-    const canvas = document.getElementById('invitationCanvas');
-    const ctx = canvas.getContext('2d');
-
-    const W = 1080;
-    const H = 1920;
-    canvas.width = W;
-    canvas.height = H;
-
-    const isTamil = currentLang === 'ta';
-
-    // Load QR code for venue location
-    let qrImage = null;
-    try {
-        qrImage = await loadImage('https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent('https://maps.app.goo.gl/2yytWm3ZG3mCYe2M6'));
-    } catch(e) {
-        console.warn('Could not load QR code:', e);
-    }
-
-    // Background gradient
-    const bgGrad = ctx.createLinearGradient(0, 0, W, H);
-    bgGrad.addColorStop(0, '#091e30');
-    bgGrad.addColorStop(0.3, '#0d2b42');
-    bgGrad.addColorStop(0.5, '#1a5276');
-    bgGrad.addColorStop(0.7, '#2e7db5');
-    bgGrad.addColorStop(1, '#091e30');
-    ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Decorative radial glows
-    drawRadialGlow(ctx, W * 0.2, H * 0.2, 300, 'rgba(60, 187, 177, 0.04)');
-    drawRadialGlow(ctx, W * 0.8, H * 0.5, 350, 'rgba(60, 187, 177, 0.03)');
-    drawRadialGlow(ctx, W * 0.3, H * 0.8, 250, 'rgba(60, 187, 177, 0.04)');
-
-    // Gold dot pattern
-    ctx.fillStyle = 'rgba(60, 187, 177, 0.03)';
-    for (let i = 0; i < W; i += 30) {
-        for (let j = 0; j < H; j += 30) {
-            ctx.beginPath();
-            ctx.arc(i, j, 1, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    // Outer gold border
-    ctx.strokeStyle = '#3cbbb1';
-    ctx.lineWidth = 3;
-    roundRect(ctx, 35, 35, W - 70, H - 70, 20);
-    ctx.stroke();
-
-    // Inner decorative border
-    ctx.strokeStyle = 'rgba(60, 187, 177, 0.3)';
-    ctx.lineWidth = 1;
-    roundRect(ctx, 50, 50, W - 100, H - 100, 15);
-    ctx.stroke();
-
-    // Corner decorative dots
-    const corners = [[70, 70], [W - 70, 70], [70, H - 70], [W - 70, H - 70]];
-    corners.forEach(([cx, cy]) => {
-        ctx.fillStyle = 'rgba(60, 187, 177, 0.6)';
-        ctx.beginPath();
-        ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(60, 187, 177, 0.3)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
-        ctx.stroke();
-    });
-
-    // Helper: draw centered text
-    function drawCentered(text, y, font, color, maxWidth) {
-        ctx.font = font;
-        ctx.fillStyle = color;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        if (maxWidth) {
-            const measured = ctx.measureText(text).width;
-            if (measured > maxWidth) {
-                ctx.save();
-                ctx.scale(maxWidth / measured, 1);
-                ctx.fillText(text, (W / 2) * (measured / maxWidth), y);
-                ctx.restore();
-                return;
-            }
-        }
-        ctx.fillText(text, W / 2, y);
-    }
-
-    // Helper: draw decorative line
-    function drawDecorativeLine(y) {
-        const lineW = 200;
-        const grad = ctx.createLinearGradient(W/2 - lineW, y, W/2 + lineW, y);
-        grad.addColorStop(0, 'transparent');
-        grad.addColorStop(0.3, 'rgba(60, 187, 177, 0.5)');
-        grad.addColorStop(0.5, 'rgba(60, 187, 177, 0.7)');
-        grad.addColorStop(0.7, 'rgba(60, 187, 177, 0.5)');
-        grad.addColorStop(1, 'transparent');
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(W/2 - lineW, y);
-        ctx.lineTo(W/2 + lineW, y);
-        ctx.stroke();
-
-        // Center ornament
-        ctx.fillStyle = 'rgba(60, 187, 177, 0.6)';
-        ctx.beginPath();
-        ctx.arc(W/2, y, 3, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    // AM Monogram at top
-    function drawAMMonogram(cx, cy, scale) {
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.scale(scale, scale);
-
-        // Outermost decorative ring - dashed
-        ctx.strokeStyle = 'rgba(60,187,177,0.35)';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([8, 6]);
-        ctx.beginPath();
-        ctx.arc(0, 0, 90, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Second ring
-        ctx.strokeStyle = 'rgba(60,187,177,0.25)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(0, 0, 80, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Inner ring - solid, more prominent
-        ctx.strokeStyle = 'rgba(60,187,177,0.5)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(0, 0, 70, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Accent ring - thin
-        ctx.strokeStyle = 'rgba(60,187,177,0.3)';
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.arc(0, 0, 65, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Cardinal dots on outer ring
-        const dotPositions = [
-            [0, -90], [90, 0], [0, 90], [-90, 0]
-        ];
-        dotPositions.forEach(([dx, dy]) => {
-            ctx.beginPath();
-            ctx.arc(dx, dy, 3, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(60,187,177,0.5)';
-            ctx.fill();
-        });
-
-        // Diagonal gold accent dots
-        const goldDots = [
-            [64, -64], [-64, 64], [64, 64], [-64, -64]
-        ];
-        goldDots.forEach(([dx, dy]) => {
-            ctx.beginPath();
-            ctx.arc(dx, dy, 2, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(212,168,67,0.4)';
-            ctx.fill();
-        });
-
-        // Decorative arcs - top
-        ctx.strokeStyle = 'rgba(212,168,67,0.3)';
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(-40, -65);
-        ctx.quadraticCurveTo(0, -80, 40, -65);
-        ctx.stroke();
-
-        // Decorative arcs - bottom
-        ctx.beginPath();
-        ctx.moveTo(-40, 65);
-        ctx.quadraticCurveTo(0, 80, 40, 65);
-        ctx.stroke();
-
-        // AM text with glow
-        ctx.shadowColor = 'rgba(60,187,177,0.3)';
-        ctx.shadowBlur = 8;
-        ctx.font = '80px "Engagement", cursive';
-        ctx.fillStyle = '#8eddd6';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('AM', 0, 5);
-        ctx.shadowBlur = 0;
-
-        ctx.restore();
-    }
-
-    drawAMMonogram(W / 2, 110, 1.0);
-
-    // Wedding Invitation label
-    const invLabel = isTamil ? 'திருமண அழைப்பிதழ்' : 'WEDDING INVITATION';
-    const labelFont = isTamil ? '34px "Kavivanar", "Noto Sans Tamil", sans-serif' : '28px "Lato", sans-serif';
-    drawCentered(invLabel, 220, labelFont, '#8eddd6');
-
-    drawDecorativeLine(255);
-
-    // Together with their family
-    const tagline = isTamil ? 'தங்கள் குடும்பத்தினருடன் சேர்ந்து' : 'Together with their family,';
-    const taglineFont = isTamil ? 'italic 22px "Kavivanar", "Noto Sans Tamil", sans-serif' : 'italic 20px "Cormorant Garamond", serif';
-    drawCentered(tagline, 290, taglineFont, 'rgba(142, 221, 214, 0.8)', W - 200);
-
-    const nameFont = isTamil ? 'bold 44px "Kavivanar", "Noto Sans Tamil", sans-serif' : '58px "Corinthia", "Great Vibes", cursive';
-    const parentFont = isTamil ? 'italic 20px "Kavivanar", "Noto Sans Tamil", sans-serif' : 'italic 18px "Cormorant Garamond", serif';
-
-    if (isTamil) {
-        // Tamil: Parents → Name → Profession
-        // Groom parents
-        drawCentered('திரு. S. ஜோதிமணி & திருமதி. சந்ரா ஜோதிமணி அவர்களின் மகன்',
-            355, parentFont, '#8eddd6', W - 140);
-        // Groom name
-        drawCentered('Er. J. ஆனந்தகுமார், B.Tech', 420, nameFont, '#ffffff', W - 120);
-        // Groom profession
-        drawCentered('Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.',
-            470, '14px "Lato", sans-serif', 'rgba(255, 255, 255, 0.65)', W - 160);
-    } else {
-        // English: Name → Profession → Parents
-        // Groom name
-        drawCentered('Er. J. Anandkumar, B.Tech', 365, nameFont, '#ffffff', W - 120);
-        // Groom profession
-        drawCentered('Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.',
-            425, '14px "Lato", sans-serif', 'rgba(255, 255, 255, 0.65)', W - 160);
-        // Groom parents
-        drawCentered('S/o Mr. S. Jothimani & Mrs. Chandra Jothimani',
-            460, parentFont, '#8eddd6');
-    }
-
-    // Ampersand with glow effect
-    ctx.shadowColor = 'rgba(60, 187, 177, 0.4)';
-    ctx.shadowBlur = 30;
-    const ampY = isTamil ? 535 : 535;
-    drawCentered('&', ampY, '64px "Great Vibes", cursive', '#3cbbb1');
-    ctx.shadowBlur = 0;
-
-    if (isTamil) {
-        // Tamil: Parents → Name
-        // Bride parents
-        drawCentered('திரு. P. சரவணன் & திருமதி. அஞ்சுகம் சரவணன் அவர்களின் மகள்',
-            605, parentFont, '#8eddd6', W - 140);
-        // Bride name
-        drawCentered('Dr. S.A. மணிமொழி @ யாழினி, B.S.M.S.', 670, nameFont, '#ffffff', W - 120);
-    } else {
-        // English: Name → Parents
-        // Bride name
-        drawCentered('Dr. S.A. Manimozhi @ Yazhini, B.S.M.S.', 625, nameFont, '#ffffff', W - 120);
-        // Bride parents
-        drawCentered('D/o Mr. P. Saravanan & Mrs. Anjukam Saravanan',
-            675, parentFont, '#8eddd6');
-    }
-
-    // Closing invitation text
-    const closingY = isTamil ? 740 : 735;
-    const closingText = isTamil
-        ? 'கை கோர்க்கும் அன் நன்னாளில் தாங்கள் தங்கள் சுற்றமும் நட்பும் சூழ வருகை தந்து மணமக்களை வாழ்த்தியருள வேண்டுகிறோம்'
-        : 'holding their hands together on the auspicious day, we cordially invite you to join us in celebrating the union of two souls.';
-    const closingFont = isTamil ? 'italic 18px "Kavivanar", "Noto Sans Tamil", sans-serif' : 'italic 16px "Cormorant Garamond", serif';
-    drawCentered(closingText, closingY, closingFont, 'rgba(142, 221, 214, 0.7)', W - 200);
-
-    // Ornament divider
-    drawDecorativeLine(790);
-    drawCentered('✦  ✦  ✦', 820, '18px serif', 'rgba(60, 187, 177, 0.6)');
-
-    // Reception box
-    drawEventBox(ctx, W, 875, isTamil ? 'வரவேற்பு' : 'RECEPTION',
-        isTamil ? 'ஏப்ரல் 11, 2026' : 'April 11, 2026',
-        isTamil ? 'சனிக்கிழமை' : 'Saturday',
-        isTamil ? 'மாலை 7:00 மணி முதல்' : '7:00 PM onwards', isTamil);
-
-    // Marriage box
-    drawEventBox(ctx, W, 1155, isTamil ? 'திருமணம்' : 'MARRIAGE',
-        isTamil ? 'ஏப்ரல் 12, 2026' : 'April 12, 2026',
-        isTamil ? 'ஞாயிற்றுக்கிழமை' : 'Sunday',
-        isTamil ? 'காலை 7:30 முதல் 9:00 வரை' : '7:30 AM to 9:00 AM', isTamil);
-
-    // Divider
-    drawDecorativeLine(1425);
-
-    // Venue section
-    const venueLabel = isTamil ? 'திருமண மண்டபம்' : 'VENUE';
-    const venueLabelFont = isTamil ? '24px "Kavivanar", "Noto Sans Tamil", sans-serif' : '14px "Lato", sans-serif';
-    drawCentered(venueLabel, 1485, venueLabelFont, '#8eddd6');
-
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-    ctx.shadowBlur = 15;
-    drawCentered('Sri Lalita Mahal', 1555, '44px "Playfair Display", serif', '#ffffff');
-    ctx.shadowBlur = 0;
-
-    // QR Code for venue directions
-    if (qrImage) {
-        const qrSize = 150;
-        const qrX = (W - qrSize) / 2;
-        const qrY = 1600;
-        // White background with rounded corners
-        ctx.fillStyle = '#ffffff';
-        roundRect(ctx, qrX - 12, qrY - 12, qrSize + 24, qrSize + 24, 12);
-        ctx.fill();
-        // Teal border
-        ctx.strokeStyle = 'rgba(60, 187, 177, 0.4)';
-        ctx.lineWidth = 1.5;
-        roundRect(ctx, qrX - 12, qrY - 12, qrSize + 24, qrSize + 24, 12);
-        ctx.stroke();
-        // Draw QR code
-        ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
-    }
-
-    const scanLabel = isTamil ? 'இடத்திற்கு QR ஸ்கேன் செய்க' : 'Scan for Directions';
-    const scanFont = isTamil ? '18px "Kavivanar", "Noto Sans Tamil", sans-serif' : '14px "Lato", sans-serif';
-    drawCentered(scanLabel, 1785, scanFont, '#8eddd6');
-
-    // Bottom decorations
-    drawDecorativeLine(1820);
-    drawCentered('✦  ✦  ✦', 1850, '18px serif', 'rgba(60, 187, 177, 0.6)');
-
-    // Footer
-    const footerMsg = isTamil
-        ? 'உங்களுடன் கொண்டாட ஆவலுடன் எதிர்பார்க்கிறோம்!'
-        : 'We look forward to celebrating with you!';
-    const footerFont = isTamil ? '20px "Kavivanar", "Noto Sans Tamil", sans-serif' : 'italic 18px "Cormorant Garamond", serif';
-    drawCentered(footerMsg, 1885, footerFont, 'rgba(220, 238, 245, 0.7)', W - 160);
-
-    drawCentered('✦  ✦  ✦', 1908, '16px serif', 'rgba(60, 187, 177, 0.5)');
-
-    // Download as PNG
-    canvas.toBlob(function(blob) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `wedding-invitation-${currentLang}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }, 'image/png');
-}
-
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = src;
-    });
-}
-
-function drawRadialGlow(ctx, x, y, radius, color) {
-    const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    grad.addColorStop(0, color);
-    grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad;
-    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
-}
-
-function drawEventBox(ctx, W, y, title, date, day, time, isTamil) {
-    const boxW = 720;
-    const boxH = 230;
-    const boxX = (W - boxW) / 2;
-
-    // Box background with gradient
-    const boxGrad = ctx.createLinearGradient(boxX, y, boxX + boxW, y + boxH);
-    boxGrad.addColorStop(0, 'rgba(0, 0, 0, 0.25)');
-    boxGrad.addColorStop(1, 'rgba(0, 0, 0, 0.15)');
-    ctx.fillStyle = boxGrad;
-    roundRect(ctx, boxX, y, boxW, boxH, 18);
-    ctx.fill();
-
-    // Box border
-    ctx.strokeStyle = 'rgba(60, 187, 177, 0.25)';
-    ctx.lineWidth = 1;
-    roundRect(ctx, boxX, y, boxW, boxH, 18);
-    ctx.stroke();
-
-    // Top accent line
-    const accentGrad = ctx.createLinearGradient(boxX + 50, y, boxX + boxW - 50, y);
-    accentGrad.addColorStop(0, 'transparent');
-    accentGrad.addColorStop(0.5, 'rgba(60, 187, 177, 0.5)');
-    accentGrad.addColorStop(1, 'transparent');
-    ctx.strokeStyle = accentGrad;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(boxX + 50, y);
-    ctx.lineTo(boxX + boxW - 50, y);
-    ctx.stroke();
-
-    // Event title
-    const titleFont = isTamil ? 'bold 30px "Noto Sans Tamil", sans-serif' : 'bold 20px "Lato", sans-serif';
-    ctx.font = titleFont;
-    ctx.fillStyle = '#3cbbb1';
-    ctx.textAlign = 'center';
-    ctx.letterSpacing = isTamil ? '0px' : '4px';
-    ctx.fillText(title, W / 2, y + 50);
-
-    // Date
-    const dateFont = isTamil ? '28px "Noto Sans Tamil", sans-serif' : '34px "Playfair Display", serif';
-    ctx.font = dateFont;
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(date, W / 2, y + 100);
-
-    // Day
-    const dayFont = isTamil ? '20px "Noto Sans Tamil", sans-serif' : 'italic 18px "Cormorant Garamond", serif';
-    ctx.font = dayFont;
-    ctx.fillStyle = '#8eddd6';
-    ctx.fillText(day, W / 2, y + 140);
-
-    // Time
-    const timeFont = isTamil ? 'bold 26px "Noto Sans Tamil", sans-serif' : 'bold 24px "Lato", sans-serif';
-    ctx.font = timeFont;
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(time, W / 2, y + 190);
-}
-
-function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-}
-
-// ===== Floating Petals =====
-function initFloatingPetals() {
-    const container = document.getElementById('floatingPetals');
-    if (!container) return;
-
-    const petalCount = window.innerWidth < 768 ? 10 : 18;
-    const petalColors = [
-        'rgba(255, 182, 193, 0.6)',
-        'rgba(255, 160, 180, 0.5)',
-        'rgba(255, 200, 210, 0.4)',
-        'rgba(255, 220, 230, 0.35)',
-        'rgba(60, 187, 177, 0.25)',
-        'rgba(142, 221, 214, 0.3)',
-    ];
-
-    for (let i = 0; i < petalCount; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'petal';
-        const size = Math.random() * 8 + 6;
-        petal.style.width = size + 'px';
-        petal.style.height = size + 'px';
-        petal.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
-        petal.style.left = Math.random() * 100 + '%';
-        petal.style.animationDuration = (Math.random() * 10 + 12) + 's';
-        petal.style.animationDelay = (Math.random() * 20) + 's';
-        container.appendChild(petal);
-    }
-}
-
-// ===== Hero Parallax on Scroll =====
-function initHeroParallax() {
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-    const shapes = document.querySelectorAll('.floating-shape');
-    if (!hero || !heroContent) return;
-
-    let ticking = false;
-
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                const heroHeight = hero.offsetHeight;
-
-                if (scrollY < heroHeight * 1.5) {
-                    const factor = scrollY / heroHeight;
-                    heroContent.style.transform = `translateY(${scrollY * 0.3}px)`;
-                    heroContent.style.opacity = Math.max(0, 1 - factor * 0.9);
-
-                    shapes.forEach((shape, i) => {
-                        const speed = 0.08 + (i * 0.04);
-                        shape.style.transform = `translateY(${scrollY * speed}px)`;
-                    });
-                }
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-}
-
-// ===== Card 3D Tilt Effect =====
-function initCardTilt() {
-    const cards = document.querySelectorAll('.event-card, .venue-card');
-
-    cards.forEach(card => {
-        function handleMove(x, y) {
-            const rect = card.getBoundingClientRect();
-            const centerX = (x - rect.left) / rect.width - 0.5;
-            const centerY = (y - rect.top) / rect.height - 0.5;
-            card.style.transition = 'none';
-            card.style.transform = `perspective(800px) rotateY(${centerX * 8}deg) rotateX(${-centerY * 8}deg) scale(1.02)`;
-        }
-
-        function handleEnd() {
-            card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-            card.style.transform = '';
-        }
-
-        // Touch events
-        card.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            handleMove(touch.clientX, touch.clientY);
-        }, { passive: true });
-        card.addEventListener('touchend', handleEnd);
-
-        // Mouse events for desktop
-        card.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
-        card.addEventListener('mouseleave', handleEnd);
-    });
-}
-
-// ===== Touch Sparkle Effect =====
-function initTouchSparkle() {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (!isTouchDevice) return;
-
-    const sparkleColors = ['#3cbbb1', '#8eddd6', '#ffb6c1', '#ffd700', '#ffffff'];
-    let lastSparkle = 0;
-
-    document.addEventListener('touchmove', (e) => {
-        const now = Date.now();
-        if (now - lastSparkle < 60) return; // Throttle
-        lastSparkle = now;
-
-        const touch = e.touches[0];
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = touch.clientX + 'px';
-        sparkle.style.top = touch.clientY + 'px';
-        sparkle.style.background = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
-        sparkle.style.boxShadow = `0 0 6px ${sparkle.style.background}`;
-        document.body.appendChild(sparkle);
-
-        setTimeout(() => sparkle.remove(), 800);
-    }, { passive: true });
-}
-
-// ===== Device Orientation Parallax (Gyroscope) =====
-function initGyroParallax() {
-    const heroContent = document.querySelector('.hero-content');
-    const monogram = document.querySelector('.hero-monogram');
-    if (!heroContent || !window.DeviceOrientationEvent) return;
-
-    let hasPermission = false;
-
-    function handleOrientation(e) {
-        if (!hasPermission && window.scrollY > window.innerHeight) return;
-        const gamma = e.gamma || 0; // Left-right tilt (-90 to 90)
-        const beta = e.beta || 0;   // Front-back tilt (-180 to 180)
-
-        const moveX = gamma * 0.3;
-        const moveY = (beta - 45) * 0.2; // Offset for typical phone holding angle
-
-        if (monogram && window.scrollY < window.innerHeight) {
-            monogram.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        }
-    }
-
-    // Try to listen without permission first (Android)
-    window.addEventListener('deviceorientation', (e) => {
-        if (e.gamma !== null) {
-            hasPermission = true;
-            handleOrientation(e);
-        }
-    }, { passive: true });
-}
-
-// ===== Initialize Everything =====
-document.addEventListener('DOMContentLoaded', () => {
-    initLanguage();
+    // Safety timeout
+    setTimeout(trigger, 4000);
+  }
+
+  /* ── Boot ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    window.scrollTo(0, 0);
     initPreloader();
-    initParticles();
-    initFloatingPetals();
-    initCountdown();
-    initScrollProgress();
-    initScrollReveal();
-    initLangToggleScroll();
-    initScrollTop();
-    initFooterHearts();
-    initHeroParallax();
-    initCardTilt();
-    initTouchSparkle();
-    initGyroParallax();
+    initAnimations();
+    initLanguage();
+    initProgress();
+    initCountdowns();
+    initSmoothScroll();
+  });
 
-    // Add number transition styles
-    const style = document.createElement('style');
-    style.textContent = `.countdown-number { transition: transform 0.3s ease, opacity 0.3s ease; }`;
-    document.head.appendChild(style);
-});
+  /* Reset scroll on refresh/navigate away */
+  window.addEventListener('beforeunload', () => {
+    window.scrollTo(0, 0);
+  });
+})();
