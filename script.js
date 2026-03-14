@@ -54,7 +54,7 @@
       document.body.classList.toggle('lang-ta', lang === 'ta');
 
       /* Button shows the OTHER language */
-      const label = lang === 'ta' ? 'EN' : '\u0BA4\u0BAE\u0BBF';
+      const label = lang === 'ta' ? 'EN' : 'தமிழ்';
       allBtns.forEach(b => b.textContent = label);
     }
 
