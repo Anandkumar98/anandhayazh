@@ -27,7 +27,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Alex+Brush&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Cookie&family=Kavivanar&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -63,13 +63,13 @@
           <span class="hero-person__tag" data-en="The Groom" data-ta="மணமகன்">The Groom</span>
           <div data-lang-block="en">
             <h2 class="hero-person__name">Er. J. Anandkumar, <span class="hero-person__degree">B.Tech</span></h2>
-            <p class="hero-person__job">Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.</p>
+            <p class="hero-person__job">Member of Technical Staff, Zoho Corp Pvt. Ltd., Chennai.</p>
             <p class="hero-person__parents-line">S/o Mr. S. Jothimani &amp; Mrs. Chandra Jothimani</p>
           </div>
           <div data-lang-block="ta" style="display:none;">
-            <p class="hero-person__parents-line">திரு. S. ஜோதிமணி &amp; திருமதி. சந்ரா ஜோதிமணி அவர்களின் மகன்</p>
+            <p class="hero-person__parents-line">திரு. <span class="initial">S. </span>ஜோதிமணி &amp; திருமதி. சந்ரா ஜோதிமணி <span class="parents-suffix">அவர்களின் மகன்</span></p>
             <h2 class="hero-person__name">Er. J. ஆனந்தகுமார், <span class="hero-person__degree">B.Tech</span></h2>
-            <p class="hero-person__job">Member of Technical Staff, Zoho Corporation Pvt. Ltd., Chennai.</p>
+            <p class="hero-person__job">Member of Technical Staff, Zoho Corp Pvt. Ltd., Chennai.</p>
           </div>
         </div>
 
@@ -86,7 +86,7 @@
             <p class="hero-person__parents-line">D/o Mr. P. Saravanan &amp; Mrs. Anjugam Saravanan</p>
           </div>
           <div data-lang-block="ta" style="display:none;">
-            <p class="hero-person__parents-line">திரு. P. சரவணன் &amp; திருமதி. அஞ்சுகம் சரவணன் அவர்களின் மகள்</p>
+            <p class="hero-person__parents-line">திரு. <span class="initial">P. </span>சரவணன் &amp; திருமதி. அஞ்சுகம் சரவணன் <span class="parents-suffix">அவர்களின் மகள்</span></p>
             <h2 class="hero-person__name">Dr. S.A. மணிமொழி @ யாழினி, <span class="hero-person__degree">B.S.M.S.</span></h2>
           </div>
         </div>
@@ -102,21 +102,50 @@
         </svg>
       </div>
 
-      <p class="hero-invite anim anim--d3" data-en="Cordially invite you to join us in celebrating the union of two souls on the auspicious day" data-ta="இந்த மங்களகரமான நாளில் இரு ஆன்மாக்களின் இணைவினை கொண்டாட தங்களை அன்புடன் அழைக்கின்றனர்">Cordially invite you to join us in celebrating the union of two souls on the auspicious day</p>
+      <div class="hero-invite anim anim--d3">
+        <p data-lang-block="en">Cordially invite you to join us in celebrating the union of two souls on the auspicious day</p>
+        <p data-lang-block="ta" style="display:none;">இரு-மனங்கள் ஒன்று கூடும் இந்த<br>
+    திருமண விழாவிற்கு வந்து<br>
+    ஒரு-மனதாய் வாழ்த்தியருள வேண்டுகின்றோம்</p>
+      </div>
 
       <div class="hero-date anim anim--d4">
         <span data-en="April 11 &amp; 12, 2026" data-ta="ஏப்ரல் 11 &amp; 12, 2026">April 11 &amp; 12, 2026</span>
       </div>
 
-      <!-- Desktop-only countdown below hero-date -->
+      <!-- Desktop-only flip clock countdown -->
       <div class="hero-countdown countdown-sync anim anim--d4" data-date="2026-04-11T19:00:00">
-        <div class="hcd"><span class="hcd__n days">00</span><span class="hcd__l" data-en="Days" data-ta="நாள்">Days</span></div>
-        <span class="hcd__sep">:</span>
-        <div class="hcd"><span class="hcd__n hours">00</span><span class="hcd__l" data-en="Hours" data-ta="மணி">Hours</span></div>
-        <span class="hcd__sep">:</span>
-        <div class="hcd"><span class="hcd__n minutes">00</span><span class="hcd__l" data-en="Mins" data-ta="நிமி">Mins</span></div>
-        <span class="hcd__sep">:</span>
-        <div class="hcd"><span class="hcd__n seconds">00</span><span class="hcd__l" data-en="Secs" data-ta="வினா">Secs</span></div>
+        <div class="flip-group">
+          <div class="flip-label" data-en="Days" data-ta="நாள்">Days</div>
+          <div class="flip-digits">
+            <div class="flip-card" data-unit="days-tens"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+            <div class="flip-card" data-unit="days-ones"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+          </div>
+        </div>
+        <span class="flip-sep">:</span>
+        <div class="flip-group">
+          <div class="flip-label" data-en="Hours" data-ta="மணி">Hours</div>
+          <div class="flip-digits">
+            <div class="flip-card" data-unit="hours-tens"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+            <div class="flip-card" data-unit="hours-ones"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+          </div>
+        </div>
+        <span class="flip-sep">:</span>
+        <div class="flip-group">
+          <div class="flip-label" data-en="Mins" data-ta="நிமி">Mins</div>
+          <div class="flip-digits">
+            <div class="flip-card" data-unit="mins-tens"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+            <div class="flip-card" data-unit="mins-ones"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+          </div>
+        </div>
+        <span class="flip-sep">:</span>
+        <div class="flip-group">
+          <div class="flip-label" data-en="Secs" data-ta="வினா">Secs</div>
+          <div class="flip-digits">
+            <div class="flip-card" data-unit="secs-tens"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+            <div class="flip-card" data-unit="secs-ones"><div class="flip-card__top">0</div><div class="flip-card__bottom">0</div><div class="flip-card__back" data-value="0"><div class="flip-card__back-top">0</div><div class="flip-card__back-bottom">0</div></div></div>
+          </div>
+        </div>
       </div>
 
       <!-- <a href="#events" class="hero-scroll anim anim--d4" aria-label="Scroll">
@@ -133,11 +162,11 @@
   <section class="section" id="events">
     <div class="wrap">
       <header class="sec-head anim">
-        <span class="sec-tag" data-en="Save The Date" data-ta="நாளை நினைவில் கொள்ளுங்கள்">Save The Date</span>
-        <h2 class="sec-title" data-en="Celebration Details" data-ta="விழா விவரங்கள்">Celebration Details</h2>
+        <!-- <span class="sec-tag" data-en="Save The Date" data-ta="விழா விவரங்கள்">Save The Date</span> -->
+        <h2 class="sec-title" data-en="Save The Date" data-ta="விழா விவரங்கள்">Save The Date</h2>
       </header>
 
-      <p class="events-subtitle anim" data-en="We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception" data-ta="எங்கள் திருமண விழா மற்றும் வரவேற்புக்கு தங்கள் அருகிருப்பை மரியாதையுடன் வேண்டுகிறோம்">We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception</p>
+      <p class="events-subtitle anim" data-en="We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception" data-ta="தாங்கள் தங்கள் சுற்றமும் நட்பும் சூழ வருகை தந்து மணமக்களை வாழ்த்தியருள அன்புடன் அழைக்கின்றோம்">We request the honour of your gracious presence at our Wedding Ceremony &amp; Reception</p>
 
       <!-- Events + Map side-by-side layout -->
       <div class="events-venue-row">
@@ -237,12 +266,20 @@
   </footer>
 
   <!-- ======================== FLOATING LANG TOGGLE (desktop) ======================== -->
-  <button class="lang-toggle-floating" id="langToggleDesktop" aria-label="Switch language">தமிழ்</button>
+  <div class="lang-toggle-floating" id="langToggleDesktop" role="button" aria-label="Switch language">
+    <span class="lang-sw__pill"></span>
+    <span class="lang-sw__opt" data-lang="en">E</span>
+    <span class="lang-sw__opt lang-sw__opt--active" data-lang="ta">த</span>
+  </div>
 
   <!-- ======================== FIXED FOOTER BAR (shown on scroll) ======================== -->
   <div class="fixed-footer" id="fixedFooter">
       <!-- Left: Language Toggle -->
-      <button class="ff__lang" id="langToggleFooter" aria-label="Switch language">தமிழ்</button>
+      <div class="ff__lang" id="langToggleFooter" role="button" aria-label="Switch language">
+        <span class="lang-sw__pill"></span>
+        <span class="lang-sw__opt" data-lang="en">E</span>
+        <span class="lang-sw__opt lang-sw__opt--active" data-lang="ta">த</span>
+      </div>
 
        <!-- Center: Countdown -->
        <div class="ff__countdown countdown-fixed" data-date="2026-04-11T19:00:00">
@@ -262,7 +299,11 @@
   </div>
 
   <!-- Floating buttons MUST come after fixed-footer for sibling selector -->
-  <button class="mobile-float-lang" id="langToggleMobile" aria-label="Switch language">தமிழ்</button>
+  <div class="mobile-float-lang" id="langToggleMobile" role="button" aria-label="Switch language">
+    <span class="lang-sw__pill"></span>
+    <span class="lang-sw__opt" data-lang="en">E</span>
+    <span class="lang-sw__opt lang-sw__opt--active" data-lang="ta">த</span>
+  </div>
   <a class="mobile-float-loc" href="https://maps.google.com/?q=Sri+Lalita+Mahal" target="_blank" rel="noopener noreferrer" aria-label="Open venue in Google Maps">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
   </a>

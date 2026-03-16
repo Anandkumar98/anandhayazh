@@ -53,9 +53,7 @@
 
       document.body.classList.toggle('lang-ta', lang === 'ta');
 
-      /* Button shows the OTHER language */
-      const label = lang === 'ta' ? 'EN' : 'தமிழ்';
-      allBtns.forEach(b => b.textContent = label);
+      /* Toggle switch pill position is handled by CSS via body.lang-ta */
     }
 
     allBtns.forEach(b => {
@@ -89,9 +87,42 @@
   function initCountdowns() {
     const target = new Date('2026-04-11T19:00:00').getTime();
 
-    /* Collect all countdown containers (footer + hero) */
-    const containers = document.querySelectorAll('.countdown-fixed, .countdown-sync');
-    if (!containers.length) return;
+    /* Footer (simple text) */
+    const footerContainers = document.querySelectorAll('.countdown-fixed');
+    /* Hero flip clock */
+    const flipContainer = document.querySelector('.countdown-sync');
+
+    if (!footerContainers.length && !flipContainer) return;
+
+    /* Helper: flip a single card to a new digit */
+    function flipTo(card, newVal) {
+      if (!card) return;
+      const topEl = card.querySelector('.flip-card__top');
+      const bottomEl = card.querySelector('.flip-card__bottom');
+      const backTop = card.querySelector('.flip-card__back-top');
+      const backBottom = card.querySelector('.flip-card__back-bottom');
+      const oldVal = topEl.textContent;
+      if (oldVal === newVal) return; /* no change, skip */
+
+      /* Set back panels to old value (top flaps away) and new value (bottom flaps in) */
+      backTop.textContent = oldVal;
+      backBottom.textContent = newVal;
+
+      /* Remove previous animation */
+      card.classList.remove('flipping');
+      void card.offsetWidth; /* force reflow */
+      card.classList.add('flipping');
+
+      /* After animation completes, update the static panels */
+      setTimeout(() => {
+        topEl.textContent = newVal;
+        bottomEl.textContent = newVal;
+        card.classList.remove('flipping');
+        /* Reset back panels */
+        backTop.textContent = newVal;
+        backBottom.textContent = newVal;
+      }, 600);
+    }
 
     function tick() {
       const now = Date.now();
@@ -100,7 +131,9 @@
       const h = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
       const m = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
       const s = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
-      containers.forEach(c => {
+
+      /* Update footer (simple text) */
+      footerContainers.forEach(c => {
         const dEl = c.querySelector('.days');
         const hEl = c.querySelector('.hours');
         const mEl = c.querySelector('.minutes');
@@ -110,6 +143,18 @@
         if (mEl) mEl.textContent = m;
         if (sEl) sEl.textContent = s;
       });
+
+      /* Update hero flip clock */
+      if (flipContainer) {
+        flipTo(flipContainer.querySelector('[data-unit="days-tens"]'), d[0]);
+        flipTo(flipContainer.querySelector('[data-unit="days-ones"]'), d[1]);
+        flipTo(flipContainer.querySelector('[data-unit="hours-tens"]'), h[0]);
+        flipTo(flipContainer.querySelector('[data-unit="hours-ones"]'), h[1]);
+        flipTo(flipContainer.querySelector('[data-unit="mins-tens"]'), m[0]);
+        flipTo(flipContainer.querySelector('[data-unit="mins-ones"]'), m[1]);
+        flipTo(flipContainer.querySelector('[data-unit="secs-tens"]'), s[0]);
+        flipTo(flipContainer.querySelector('[data-unit="secs-ones"]'), s[1]);
+      }
     }
 
     tick();
@@ -133,20 +178,52 @@
   function initScrollFooter() {
     const footer = document.getElementById('fixedFooter');
     if (!footer) return;
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          if (window.scrollY > 50) {
-            footer.classList.add('fixed-footer--visible');
-          } else {
-            footer.classList.remove('fixed-footer--visible');
-          }
-          ticking = false;
-        });
-        ticking = true;
+
+    let shown = false;
+
+    function show() {
+      if (!shown) {
+        footer.classList.add('fixed-footer--visible');
+        shown = true;
+      }
+    }
+
+    function hide() {
+      if (shown) {
+        footer.classList.remove('fixed-footer--visible');
+        shown = false;
+      }
+    }
+
+    function check() {
+      if (window.scrollY > 0) {
+        show();
+      } else {
+        hide();
+      }
+    }
+
+    /* Listen to scroll with no rAF delay for immediate response */
+    window.addEventListener('scroll', check, { passive: true });
+
+    /* Detect touch start — show footer immediately on first touch-move */
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      const delta = touchStartY - e.touches[0].clientY;
+      /* Scrolling up (finger moves up = positive delta) */
+      if (delta > 5) {
+        show();
       }
     }, { passive: true });
+
+    /* Also listen to visualViewport resize (URL bar hide/show) */
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', check);
+    }
   }
 
   /* ── Preloader ── */
