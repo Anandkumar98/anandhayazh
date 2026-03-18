@@ -74,10 +74,6 @@
   animation: preloaderBreathe 2s ease-in-out infinite;
 }
 
-.preloader--bg-fade {
-  background: transparent;
-}
-
 @keyframes preloaderFadeIn {
   from { opacity: 0; transform: translateY(12px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -421,18 +417,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   pointer-events: none;
 }
 
-/* Kolam decorative borders */
-.kolam-border {
-  position: absolute;
-  left: 0; right: 0;
-  color: var(--gold);
-  z-index: 1;
-  line-height: 0;
-}
-.kolam-border svg { width: 100%; height: 20px; }
-.kolam-border--top { top: 0; }
-.kolam-border--bottom { bottom: 0; }
-
 .hero-inner {
   position: relative;
   z-index: 2;
@@ -446,12 +430,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   align-items: center;
   justify-content: space-evenly;
   overflow: hidden;
-}
-
-/* Auspicious symbol */
-.auspicious {
-  color: var(--gold);
-  margin-bottom: 20px;
 }
 
 .hero-eyebrow {
@@ -602,13 +580,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
 .hero-propose__img--visible {
   opacity: 1;
   transform: translateY(calc(var(--bride-tag-offset, 0px) * -0.5));
-}
-
-.hero-divider {
-  color: var(--gold);
-  margin: 0;
-  flex-shrink: 0;
-  display: none;
 }
 
 .hero-invite {
@@ -881,33 +852,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   }
 }
 
-/* Scroll indicator */
-.hero-scroll {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: rgba(45, 138, 110, 0.35);
-  transition: color 0.3s;
-}
-.hero-scroll:hover { color: rgba(45, 138, 110, 0.7); }
-
-.hero-scroll__text {
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-.hero-scroll__dot {
-  animation: scrollBounce 2s ease-in-out infinite;
-}
-
-@keyframes scrollBounce {
-  0%, 100% { cy: 9; opacity: 1; }
-  50% { cy: 20; opacity: 0.3; }
-}
-
 /* ═══════════════════════════════════════════
    SHARED SECTIONS
    ═══════════════════════════════════════════ */
@@ -916,28 +860,10 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   position: relative;
 }
 
-.section--dark {
-  background: var(--bg-dark);
-  color: var(--cream-dk);
-}
-
 .sec-head {
   text-align: center;
   margin-bottom: clamp(28px, 6vw, 40px);
 }
-
-.sec-tag {
-  display: inline-block;
-  font-family: var(--f-sans);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--maroon);
-  margin-bottom: 10px;
-}
-
-.section--dark .sec-tag { color: var(--gold-lt); }
 
 .sec-title {
   font-family: var(--f-serif);
@@ -947,8 +873,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   line-height: 1.3;
   color: var(--stone-800);
 }
-
-.section--dark .sec-title { color: #fff; }
 
 #events .sec-title {
   font-family: var(--f-script);
@@ -1049,14 +973,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   position: relative;
   width: 80%;
   margin: 0 auto;
-}
-
-.ev::before {
-  display: none;
-}
-
-.ev--muhurtham::before {
-  display: none;
 }
 
 .ev__label {
@@ -1199,33 +1115,6 @@ body:not(.lang-ta) .lang-sw__opt[data-lang="ta"] {
   opacity: 0.85;
 }
 
-.section--dark .btn {
-  background: rgba(45, 138, 110, 0.12);
-  border: 1px solid rgba(45, 138, 110, 0.2);
-  color: var(--gold-lt);
-}
-
-/* ═══════════════════════════════════════════
-   BLESSINGS
-   ═══════════════════════════════════════════ */
-.bless {
-  position: relative;
-  text-align: center;
-  background: rgba(45, 138, 110, 0.08);
-  border: 1px solid rgba(45, 138, 110, 0.15);
-  border-radius: var(--radius);
-  padding: clamp(32px, 7vw, 48px) clamp(24px, 5vw, 36px);
-}
-
-.bless__text {
-  font-family: var(--f-serif);
-  font-style: italic;
-  font-size: clamp(1rem, 3.5vw, 1.15rem);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 2;
-}
-
 /* ═══════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════ */
@@ -1322,8 +1211,6 @@ body.lang-ta .hero-invite,
 body.lang-ta .hero-date span,
 body.lang-ta .hero-person__tag,
 body.lang-ta .hero-person__job,
-body.lang-ta .hero-scroll__text,
-body.lang-ta .sec-tag,
 body.lang-ta .sec-title,
 body.lang-ta .events-subtitle,
 body.lang-ta .ev__badge,
@@ -1331,8 +1218,6 @@ body.lang-ta .ev__label,
 body.lang-ta .ev__row span,
 body.lang-ta .ev__monthyr span,
 body.lang-ta .cdf__l,
-body.lang-ta .venue-name,
-body.lang-ta .bless__text,
 body.lang-ta .btn span,
 body.lang-ta .foot__note {
   font-family: var(--f-tamil);
@@ -1384,10 +1269,6 @@ body.lang-ta .sec-title {
     padding: 0;
     height: 100vh;
     height: 100dvh;
-  }
-
-  .hero-divider {
-    display: none;
   }
 
   .hero-eyebrow {
