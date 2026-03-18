@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All According to Plan</title>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+    body{
+      min-height:100dvh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      background:#000;
+      background:radial-gradient(ellipse at 50% 40%,#0d001a 0%,#000 70%);
+      color:#fff;
+      font-family:'Segoe UI',system-ui,sans-serif;
+      overflow:hidden;
+      padding:1.5rem;
+      text-align:center;
+    }
+
+    /* subtle purple vignette pulse */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background:radial-gradient(ellipse at 50% 50%,transparent 40%,#000 100%);
+      pointer-events:none;
+      animation:vignettePulse 4s ease-in-out infinite alternate;
+    }
+    @keyframes vignettePulse{
+      0%{opacity:.6}
+      100%{opacity:1}
+    }
+
+    .container{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:1.5rem;
+      max-width:600px;
+      animation:fadeUp 1.2s ease-out both;
+    }
+    @keyframes fadeUp{
+      0%{opacity:0;transform:translateY(30px)}
+      100%{opacity:1;transform:translateY(0)}
+    }
+
+    .image-wrap{
+      width:min(90vw,480px);
+    }
+
+    .image-wrap img{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+
+    .quote{
+      font-size:clamp(1.1rem,3vw,1.5rem);
+      font-weight:600;
+      line-height:1.5;
+      letter-spacing:.02em;
+      color:#fff;
+      text-shadow:0 0 20px rgba(255,255,255,.25);
+      animation:textReveal 1.6s ease-out 0.6s both;
+    }
+    @keyframes textReveal{
+      0%{opacity:0;filter:blur(8px)}
+      100%{opacity:1;filter:blur(0)}
+    }
+
+    .quote em{
+      display:block;
+      margin-top:.5rem;
+      font-size:.75em;
+      color:rgba(255,255,255,.5);
+      font-style:normal;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    /* floating particles */
+    .particle{
+      position:fixed;
+      width:3px;height:3px;
+      background:#b070e0;
+      border-radius:50%;
+      opacity:0;
+      pointer-events:none;
+      animation:float linear infinite;
+    }
+    @keyframes float{
+      0%  {opacity:0;transform:translateY(100vh) scale(.5)}
+      10% {opacity:.6}
+      90% {opacity:.6}
+      100%{opacity:0;transform:translateY(-10vh) scale(1.2)}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="image-wrap">
+      <img src="aizen.png" alt="" width="1366" height="768">
+    </div>
+    <p class="quote">
+      Yokozo!<br>
+      You being here was part of my plan all along.<br>
+      <em>— All according to Keikaku</em>
+    </p>
+  </div>
+
+  <!-- floating particles -->
+  <script>
+    (function(){
+      const count=18;
+      for(let i=0;i<count;i++){
+        const p=document.createElement('div');
+        p.className='particle';
+        p.style.left=Math.random()*100+'vw';
+        p.style.animationDuration=(6+Math.random()*8)+'s';
+        p.style.animationDelay=(Math.random()*10)+'s';
+        p.style.width=p.style.height=(1.5+Math.random()*2.5)+'px';
+        document.body.appendChild(p);
+      }
+    })();
+  </script>
+</body>
+</html>
