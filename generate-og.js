@@ -112,8 +112,9 @@ const HEIGHT = 630;
         proposeImg.style.width = 'clamp(120px, 18vw, 180px)';
       }
 
-      // Prevent name + degree from wrapping
-      document.querySelectorAll('.hero-person__name').forEach(el => {
+      // Prevent groom name + degree from wrapping (bride stays natural 2-line)
+      const groomNames = document.querySelectorAll('#groomCard .hero-person__name');
+      groomNames.forEach(el => {
         el.style.whiteSpace = 'nowrap';
       });
     }, { w: WIDTH, h: HEIGHT });
