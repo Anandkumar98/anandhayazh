@@ -111,6 +111,11 @@ const HEIGHT = 630;
         proposeImg.style.transform = 'scale(1)';
         proposeImg.style.width = 'clamp(120px, 18vw, 180px)';
       }
+
+      // Prevent name + degree from wrapping
+      document.querySelectorAll('.hero-person__name').forEach(el => {
+        el.style.whiteSpace = 'nowrap';
+      });
     }, { w: WIDTH, h: HEIGHT });
 
     // Small delay for layout to settle
