@@ -85,7 +85,9 @@
 
   /* ── Countdowns ── */
   function initCountdowns() {
-    const target = new Date('2026-04-11T19:00:00').getTime();
+    /* Read target date from the first element with data-date, fallback to default */
+    const dateSource = document.querySelector('[data-date]');
+    const target = new Date(dateSource ? dateSource.getAttribute('data-date') : '2026-04-11T19:00:00').getTime();
 
     /* Footer (simple text) */
     const footerContainers = document.querySelectorAll('.countdown-fixed');
